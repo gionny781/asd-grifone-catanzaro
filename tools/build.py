@@ -285,6 +285,18 @@ PAGES["contatti.html"] = ("Contatti", "Contatti, sede legale e campo di gioco de
   </div>
 </div></section>''')
 
+PAGES["persona.html"] = ("Scheda", "Scheda di un tesserato dell'A.S.D. Grifone Catanzaro.", '''<section class="phero"><div class="wrap">
+  <h1 id="p-ruolo">Scheda</h1>
+  <p id="p-nome-h"></p>
+</div></section>
+<section class="blk pb"><div class="wrap">
+  <a class="back" id="p-back" href="societa.html">← Torna indietro</a>
+  <div class="scheda" id="scheda">
+    <div class="empty">Caricamento…</div>
+  </div>
+  <nav class="pnav" id="p-nav" aria-label="Altri tesserati"></nav>
+</div></section>''')
+
 for f, (title, desc, body) in PAGES.items():
     (ROOT / f).write_text(layout(f, title, desc, body), encoding="utf-8")
     print("scritto", f)

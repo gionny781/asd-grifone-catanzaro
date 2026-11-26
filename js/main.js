@@ -222,12 +222,14 @@
   }
 
   /* ---------- PERSONE (calciatori e staff) ---------- */
-  const card = (p, numero) => `
-    <div class="pc reveal stagger">
+  const slug = (t) => String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const scheda = (tipo, p) => `persona.html?t=${tipo}&n=${encodeURIComponent(slug(p.nome))}`;
+  const card = (p, numero, tipo = 'staff') => `
+    <a class="pc reveal stagger" href="${scheda(tipo, p)}">
       <div class="pimg">${p.foto ? `<img src="${esc(img(p.foto))}" alt="${esc(p.nome)}" loading="lazy">` : '<img class="logo" src="images/logo.png" alt="">'}
         ${numero ? `<span class="num">${esc(numero)}</span>` : ''}</div>
       <div class="info"><span class="nome">${esc(p.nome)}</span><span class="ruo">${esc(p.ruolo || '')}${p.anno_nascita ? ' · ' + esc(p.anno_nascita) : ''}</span></div>
-    </div>`;
+    </a>`;
 
   const rosa = $('#rosa');
   if (rosa) {
@@ -240,8 +242,8 @@
       const senza = list.filter((x) => !x.ruolo);
       rosa.innerHTML = gruppi.map((r) => {
         const g = list.filter((x) => x.ruolo === r).sort((a, b) => (parseInt(a.numero) || 99) - (parseInt(b.numero) || 99));
-        return g.length ? `<div class="ruolo"><h2 class="reveal">${esc(plurale[r] || r)} <small>${g.length}</small></h2><div class="people">${g.map((p) => card({ ...p, ruolo: r }, p.numero)).join('')}</div></div>` : '';
-      }).join('') + (senza.length ? `<div class="ruolo"><h2 class="reveal">Rosa</h2><div class="people">${senza.map((p) => card(p, p.numero)).join('')}</div></div>` : '');
+        return g.length ? `<div class="ruolo"><h2 class="reveal">${esc(plurale[r] || r)} <small>${g.length}</small></h2><div class="people">${g.map((p) => card({ ...p, ruolo: r }, p.numero, 'calciatori')).join('')}</div></div>` : '';
+      }).join('') + (senza.length ? `<div class="ruolo"><h2 class="reveal">Rosa</h2><div class="people">${senza.map((p) => card(p, p.numero, 'calciatori')).join('')}</div></div>` : '');
       watch(rosa);
     });
   }
@@ -266,13 +268,61 @@
         dirig.innerHTML = ruoli.map((r) => {
           const persone = g.filter((x) => (x.ruolo || 'Dirigenti').trim() === r);
           return `<div class="org-row reveal"><h3>${esc(r)}</h3><div class="org-people">${persone.map((p) => `
-            <div class="op">
+            <a class="op" href="${scheda('staff', p)}">
               <div class="op-img">${p.foto ? `<img src="${esc(img(p.foto))}" alt="${esc(p.nome)}" loading="lazy">` : '<img class="logo" src="images/logo.png" alt="">'}</div>
               <span>${esc(p.nome)}</span>
-            </div>`).join('')}</div></div>`;
+            </a>`).join('')}</div></div>`;
         }).join('');
         watch(dirig);
       }
+    });
+  }
+
+  /* ---------- SCHEDA PERSONALE ---------- */
+  const schedaEl = $('#scheda');
+  if (schedaEl) {
+    const q = new URLSearchParams(location.search);
+    const tipo = q.get('t') === 'calciatori' ? 'calciatori' : 'staff';
+    const nome = q.get('n') || '';
+    load(tipo).then((d) => {
+      const list = arr(d).filter((x) => x && x.nome);
+      const isDir = (x) => (x.area || 'Dirigenza') === 'Dirigenza';
+      const p = list.find((x) => slug(x.nome) === nome);
+      const back = $('#p-back');
+      if (!p) {
+        schedaEl.innerHTML = '<div class="empty">Scheda non trovata. Torna alla <a href="squadra.html">squadra</a> o alla <a href="societa.html">società</a>.</div>';
+        return;
+      }
+      const giocatore = tipo === 'calciatori';
+      const dir = !giocatore && isDir(p);
+      back.href = dir ? 'societa.html' : 'squadra.html';
+      back.textContent = dir ? '← Torna all\'organigramma' : giocatore ? '← Torna alla rosa' : '← Torna allo staff';
+      const ruolo = p.ruolo || (giocatore ? 'Calciatore' : 'Staff');
+      $('#p-ruolo').textContent = ruolo;
+      $('#p-nome-h').textContent = p.nome;
+      document.title = `${p.nome} – ${ruolo} – A.S.D. Grifone Catanzaro`;
+      const dati = [
+        ['Nome e cognome', p.nome],
+        ['Ruolo', ruolo],
+        giocatore ? ['Numero di maglia', p.numero] : null,
+        [giocatore ? 'Nascita' : 'Data di nascita', giocatore ? p.anno_nascita : p.data_nascita],
+        !giocatore ? ['Area', dir ? 'Dirigenza' : 'Staff tecnico'] : null,
+      ].filter((x) => x && x[1]);
+      schedaEl.innerHTML = `
+        <div class="s-foto reveal">${p.foto ? `<img src="${esc(img(p.foto))}" alt="${esc(p.nome)}">` : '<div class="s-nofoto"><img src="images/logo.png" alt=""></div>'}
+          ${giocatore && p.numero ? `<span class="s-num">${esc(p.numero)}</span>` : ''}</div>
+        <div class="s-dati reveal">
+          <h2>Dati anagrafici</h2>
+          <dl>${dati.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
+          ${p.bio ? `<div class="prose">${paras(p.bio)}</div>` : ''}
+        </div>`;
+      // altri tesserati dello stesso gruppo: precedente / successivo
+      const gruppo = giocatore ? list : list.filter((x) => isDir(x) === dir);
+      const i = gruppo.indexOf(p);
+      const prev = gruppo[i - 1];
+      const next = gruppo[i + 1];
+      $('#p-nav').innerHTML = (prev ? `<a href="${scheda(tipo, prev)}">← ${esc(prev.nome)}</a>` : '<span></span>') + (next ? `<a href="${scheda(tipo, next)}">${esc(next.nome)} →</a>` : '');
+      watch(schedaEl);
     });
   }
 

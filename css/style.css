@@ -247,6 +247,28 @@ footer a:hover{color:var(--giallo);padding-left:4px}
 .op:hover .op-img{transform:translateY(-6px) scale(1.05);border-color:var(--verde);box-shadow:0 14px 28px rgba(11,31,20,.25)}
 .op span{font-family:Oswald,sans-serif;font-size:18px;font-weight:600;text-transform:uppercase;line-height:1.2}
 
+/* scheda personale */
+a.pc,a.op{text-decoration:none;color:var(--testo)}
+a.op:hover span{color:var(--verde)}
+.back{display:inline-block;margin-bottom:24px;font-weight:700;text-decoration:none;transition:transform .25s}
+.back:hover{transform:translateX(-4px)}
+.scheda{display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start}
+.s-foto{position:relative;flex:1 1 340px;max-width:460px;box-shadow:0 14px 40px rgba(11,31,20,.2);border-bottom:6px solid var(--giallo);overflow:hidden}
+.s-foto img{width:100%;aspect-ratio:4/5;object-fit:cover;transition:transform 1s var(--ease)}
+.s-foto:hover img{transform:scale(1.04)}
+.s-nofoto{aspect-ratio:4/5;display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(90deg,var(--verde2) 0 36px,var(--verde) 36px 72px)}
+.s-nofoto img{width:55%;aspect-ratio:auto}
+.s-num{position:absolute;top:12px;left:18px;font-family:Oswald,sans-serif;font-size:96px;font-weight:700;line-height:1;color:var(--giallo);text-shadow:0 4px 14px rgba(0,0,0,.45)}
+.s-dati{flex:1 1 360px;min-width:0}
+.s-dati h2{margin:0 0 16px;font-family:Oswald,sans-serif;font-size:34px;text-transform:uppercase}
+.s-dati dl{margin:0 0 24px;background:#fff;padding:4px 22px;box-shadow:0 2px 10px rgba(11,31,20,.06)}
+.s-dati dl div{padding:14px 0;border-bottom:1px solid #ECEAE2}
+.s-dati dl div:last-child{border-bottom:0}
+.s-dati dt{font-family:Oswald,sans-serif;font-size:15px;text-transform:uppercase;letter-spacing:.6px;color:var(--verde)}
+.s-dati dd{margin:3px 0 0;font-size:19px;font-weight:600}
+.pnav{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:40px;padding-top:20px;border-top:2px solid #E6E4DA}
+.pnav a{font-weight:700;text-decoration:none;font-family:Oswald,sans-serif;font-size:18px;text-transform:uppercase;transition:color .2s}
+
 /* contatti */
 .contacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:24px;align-items:start}
 .mapbox{aspect-ratio:4/3;background:#E6E4DA}
