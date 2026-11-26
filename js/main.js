@@ -17,6 +17,45 @@
 
   $('#anno').textContent = new Date().getFullYear();
 
+  /* ---------- MODALITÀ MANUTENZIONE ----------
+     Si attiva dal pannello (voce "Modalità manutenzione").
+     Per vedere comunque il sito mentre è in pausa: aggiungi ?anteprima all'indirizzo (es. www.asdgrifonecz.it/?anteprima).
+     Per uscire dall'anteprima: ?anteprima=no */
+  const unlock = () => document.documentElement.classList.remove('chk');
+  {
+    const q = new URLSearchParams(location.search);
+    try {
+      if (q.has('anteprima')) {
+        if (q.get('anteprima') === 'no') localStorage.removeItem('grifone-anteprima');
+        else localStorage.setItem('grifone-anteprima', '1');
+      }
+    } catch (e) { /* storage non disponibile */ }
+    let anteprima = false;
+    try { anteprima = localStorage.getItem('grifone-anteprima') === '1'; } catch (e) { anteprima = q.has('anteprima') && q.get('anteprima') !== 'no'; }
+    load('manutenzione').then((m) => {
+      if (m && m.attiva === true) {
+        if (anteprima) {
+          document.body.insertAdjacentHTML('beforeend', '<div class="mnt-prev">Sito in pausa: lo vedi solo tu in anteprima · <a href="?anteprima=no">esci</a></div>');
+        } else {
+          const social = [...document.querySelectorAll('.topbar .social a')].map((a) => a.outerHTML).join('');
+          document.body.insertAdjacentHTML('beforeend', `<div class="mnt" role="main">
+            <div class="mnt-box">
+              <div class="mnt-tape" aria-hidden="true"></div>
+              ${m.immagine ? `<img class="mnt-img" src="${esc(img(m.immagine))}" alt="">` : '<img class="mnt-logo" src="images/logo.png" alt="Stemma A.S.D. Grifone Catanzaro">'}
+              <h1>${esc(m.titolo || 'Sito in aggiornamento').replace(/^(\S+)/, '<span>$1</span>')}</h1>
+              ${paras(m.messaggio)}
+              ${m.fino_al ? `<span class="quando">Torniamo online: ${esc(m.fino_al)}</span>` : ''}
+              <nav class="social" aria-label="Social">${social}</nav>
+              <div class="mnt-tape" aria-hidden="true"></div>
+            </div></div>`);
+          document.title = `${m.titolo || 'Sito in aggiornamento'} – A.S.D. Grifone Catanzaro`;
+          document.body.style.overflow = 'hidden';
+        }
+      }
+      unlock();
+    });
+  }
+
   /* ---------- header, menu, torna su ---------- */
   const header = $('header');
   const totop = $('.totop');

@@ -58,6 +58,7 @@ def layout(file, title, desc, body):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<script>document.documentElement.classList.add('chk');setTimeout(function(){{document.documentElement.classList.remove('chk')}},2500)</script>
 </head>
 <body data-page="{file.replace(".html", "")}">
 

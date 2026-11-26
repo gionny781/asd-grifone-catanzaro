@@ -3,6 +3,28 @@ media:
   output: images/uploads
 
 content:
+  - name: manutenzione
+    label: ⚠ Modalità manutenzione (sito in pausa)
+    type: file
+    path: data/manutenzione.json
+    format: json
+    fields:
+      - name: attiva
+        label: Sito in pausa (se attivo, i visitatori vedono solo la pagina di avviso)
+        type: boolean
+      - name: titolo
+        label: Titolo dell'avviso
+        type: string
+      - name: messaggio
+        label: Messaggio (lascia una riga vuota tra i paragrafi)
+        type: text
+      - name: fino_al
+        label: Torniamo online il (facoltativo, es. 3 dicembre)
+        type: string
+      - name: immagine
+        label: Immagine personalizzata (facoltativa; se vuota usa la grafica del Grifone)
+        type: image
+
   - name: societa
     label: Società (chi siamo e foto squadra)
     type: file
