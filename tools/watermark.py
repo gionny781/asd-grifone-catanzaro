@@ -54,6 +54,8 @@ def main():
     for item in gallery if isinstance(gallery, list) else []:
         f = (item or {}).get("foto") or []
         percorsi += f if isinstance(f, list) else [f]
+        for o in (item or {}).get("foto_didascalia") or []:
+            if isinstance(o, dict) and o.get("immagine"): percorsi.append(o["immagine"])
     for p in percorsi:
         p = str(p or "").lstrip("/")
         if not p: continue

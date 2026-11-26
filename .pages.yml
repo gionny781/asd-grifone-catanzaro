@@ -25,18 +25,31 @@ content:
         label: Immagine personalizzata (facoltativa; se vuota usa la grafica del Grifone)
         type: image
 
+  - name: fotosquadra
+    label: Foto della squadra attuale
+    type: file
+    path: data/fotosquadra.json
+    format: json
+    fields:
+      - name: foto
+        label: Foto della squadra
+        type: image
+      - name: didascalia
+        label: Didascalia (es. Stagione 2026 - 2027)
+        type: string
+      - name: home
+        label: Mostra nella Home
+        type: boolean
+      - name: pagina_squadra
+        label: Mostra nella pagina Squadra
+        type: boolean
+
   - name: societa
-    label: Società (chi siamo e foto squadra)
+    label: Società (chi siamo)
     type: file
     path: data/societa.json
     format: json
     fields:
-      - name: foto_squadra
-        label: Foto della squadra (appare in Home e nella pagina Squadra)
-        type: image
-      - name: didascalia_foto
-        label: Didascalia foto squadra (es. Stagione 2026/27)
-        type: string
       - name: chi_siamo
         label: Chi siamo (storia e presentazione; lascia una riga vuota tra i paragrafi)
         type: text
@@ -45,6 +58,9 @@ content:
         type: string
       - name: campo
         label: Campo di gioco
+        type: string
+      - name: colori
+        label: Colori sociali
         type: string
       - name: email
         label: Email di contatto
@@ -181,14 +197,14 @@ content:
         type: text
 
   - name: gallery
-    label: Fotogallery (un carosello per ogni partita o evento)
+    label: Fotogallery (un carosello per ogni galleria)
     type: file
     path: data/gallery.json
     format: json
     list: true
     fields:
       - name: titolo
-        label: Titolo (es. Vigor Catanzaro - ASD Grifone 18.02.2023)
+        label: Titolo della galleria (es. Vigor Catanzaro - ASD Grifone 18.02.2023, oppure Allenamenti di novembre)
         type: string
         required: true
       - name: album
@@ -197,11 +213,21 @@ content:
       - name: data
         label: Data
         type: date
+      - name: foto_didascalia
+        label: Foto con didascalia (una alla volta, ognuna con la sua descrizione)
+        type: object
+        list: true
+        fields:
+          - name: immagine
+            label: Foto
+            type: image
+          - name: didascalia
+            label: Didascalia di questa foto
+            type: string
       - name: foto
-        label: Foto (puoi selezionarne tante insieme; trascinale per cambiare l'ordine)
+        label: Caricamento veloce (tante foto insieme, senza didascalia; vengono dopo quelle sopra)
         type: image
         list: true
-        required: true
       - name: home
         label: Mostra questo carosello nella Home
         type: boolean

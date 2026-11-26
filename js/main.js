@@ -132,11 +132,6 @@
     if (s.email) {
       document.querySelectorAll('.f-email').forEach((el) => { el.innerHTML = `<a href="mailto:${esc(s.email)}">${esc(s.email)}</a>`; });
     }
-    if (s.foto_squadra && $('#team-img')) {
-      $('#team-img').src = img(s.foto_squadra);
-      if (s.didascalia_foto) $('#team-cap').textContent = s.didascalia_foto;
-      show('#team-block', true);
-    }
     if ($('#about-teaser') && s.chi_siamo) {
       const t = String(s.chi_siamo).trim().split(/\n\s*\n/)[0];
       $('#about-teaser').textContent = t.length > 320 ? t.slice(0, 317).replace(/\s+\S*$/, '') + '…' : t;
@@ -148,12 +143,27 @@
         ['Fondazione', s.fondazione],
         ['Campo di gioco', s.campo],
         ['Sede', 'Via Magna Grecia, 51/B – Catanzaro'],
-        ['Colori sociali', 'Giallo e verde'],
+        ['Colori sociali', s.colori || 'Giallo e verde'],
         ['Email', s.email ? `<a href="mailto:${esc(s.email)}">${esc(s.email)}</a>` : ''],
       ].filter(([, v]) => v);
       $('#facts').innerHTML = facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${k === 'Email' ? v : esc(v)}</dd></div>`).join('');
     }
   });
+
+  /* ---------- FOTO DELLA SQUADRA ATTUALE ---------- */
+  if ($('#team-img')) {
+    Promise.all([load('fotosquadra'), load('societa')]).then(([f, soc]) => {
+      f = f && typeof f === 'object' && !Array.isArray(f) ? f : {};
+      soc = soc && typeof soc === 'object' ? soc : {};
+      const foto = f.foto || soc.foto_squadra; // compatibilità col vecchio campo
+      const qui = document.body.dataset.page === 'index' ? f.home !== false : f.pagina_squadra !== false;
+      if (!foto || !qui) return;
+      $('#team-img').src = img(foto);
+      const cap = f.didascalia || soc.didascalia_foto;
+      if (cap) $('#team-cap').textContent = cap;
+      show('#team-block', true);
+    });
+  }
 
   /* ---------- NEWS ---------- */
   const newsList = $('#news-list');
@@ -221,7 +231,10 @@
     titolo: x.titolo || x.didascalia || '',
     album: String(x.album || '').trim(),
     data: x.data || '',
-    foto: (Array.isArray(x.foto) ? x.foto : [x.foto]).filter(Boolean),
+    foto: [
+      ...arr(x.foto_didascalia).filter((o) => o && o.immagine).map((o) => ({ src: o.immagine, cap: o.didascalia || '' })),
+      ...(Array.isArray(x.foto) ? x.foto : [x.foto]).filter(Boolean).map((f) => (typeof f === 'object' ? { src: f.immagine || f.src, cap: f.didascalia || '' } : { src: f, cap: '' })),
+    ].filter((o) => o.src),
     home: x.home === true || x.carosello === true,
   })).filter((x) => x.foto.length).sort(byDate);
 
@@ -232,8 +245,9 @@
   const lightbox = (fotos, start, titolo) => {
     let i = start;
     const draw = () => {
-      body.innerHTML = `<img src="${esc(img(fotos[i]))}" alt="${esc(titolo)} – foto ${i + 1}">
-        <p id="modal-title">${esc(titolo)}${fotos.length > 1 ? ` · ${i + 1} / ${fotos.length}` : ''}</p>
+      const f = fotos[i];
+      body.innerHTML = `<img src="${esc(img(f.src))}" alt="${esc(f.cap || titolo)}">
+        <p id="modal-title">${f.cap ? `<b>${esc(f.cap)}</b><br>` : ''}${esc(titolo)}${fotos.length > 1 ? ` · ${i + 1} / ${fotos.length}` : ''}</p>
         ${fotos.length > 1 ? `<button class="lb-btn prev" aria-label="Foto precedente">${ICON_L}</button><button class="lb-btn next" aria-label="Foto successiva">${ICON_R}</button>` : ''}`;
     };
     open('', true);
@@ -257,8 +271,9 @@
     slot.innerHTML = `<div class="car" role="region" aria-roledescription="carosello" aria-label="${esc(titolo)}">
         <div class="car-bar" aria-hidden="true"></div>
         <div class="car-track" tabindex="0">${fotos.map((f, i) => `
-          <button class="slide${i ? '' : ' on'}" data-i="${i}" aria-label="Foto ${i + 1} di ${fotos.length}. Apri a schermo intero">
-            <img src="${esc(img(f))}" alt="${esc(titolo)} – foto ${i + 1}" ${i ? 'loading="lazy"' : ''}>
+          <button class="slide${i ? '' : ' on'}" data-i="${i}" aria-label="Foto ${i + 1} di ${fotos.length}${f.cap ? ': ' + esc(f.cap) : ''}. Apri a schermo intero">
+            <img src="${esc(img(f.src))}" alt="${esc(f.cap || titolo + ' – foto ' + (i + 1))}" ${i ? 'loading="lazy"' : ''}>
+            ${f.cap ? `<span class="cap">${esc(f.cap)}</span>` : ''}
           </button>`).join('')}</div>
         ${many ? `<button class="car-btn prev" aria-label="Foto precedente">${ICON_L}</button><button class="car-btn next" aria-label="Foto successiva">${ICON_R}</button>` : ''}
         ${many ? (dotsHtml ? `<div class="car-dots" role="tablist" aria-label="Scegli la foto">${dotsHtml}</div>` : `<div class="car-count" aria-live="polite">1 / ${fotos.length}</div>`) : ''}
@@ -331,11 +346,11 @@
         }
       }
       if (photoList) {
-        const ultime = gals.flatMap((x) => x.foto.map((f, i) => ({ f, i, gal: x }))).slice(0, +photoList.dataset.limit || 4);
+        const ultime = gals.flatMap((x) => x.foto.map((f, i) => ({ f: f.src, cap: f.cap, i, gal: x }))).slice(0, +photoList.dataset.limit || 4);
         show('#home-gallery', ultime.length > 0);
         photoList.innerHTML = ultime.map((u, k) => `
           <button class="ph reveal stagger" data-k="${k}" aria-label="Apri foto: ${esc(u.gal.titolo)}">
-            <img src="${esc(img(u.f))}" alt="${esc(u.gal.titolo)}" loading="lazy"><span>${esc(u.gal.titolo)}</span>
+            <img src="${esc(img(u.f))}" alt="${esc(u.cap || u.gal.titolo)}" loading="lazy"><span>${esc(u.cap || u.gal.titolo)}</span>
           </button>`).join('');
         photoList.addEventListener('click', (e) => {
           const b = e.target.closest('.ph');
