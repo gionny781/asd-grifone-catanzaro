@@ -84,7 +84,10 @@ content:
         label: Anno o data di nascita
         type: string
       - name: foto
-        label: Foto
+        label: Foto (organigramma / elenco)
+        type: image
+      - name: foto_scheda
+        label: Foto per la scheda personale (facoltativa; se vuota usa quella sopra)
         type: image
       - name: bio
         label: Presentazione (facoltativa, appare nella scheda personale)
@@ -110,7 +113,10 @@ content:
         options:
           values: [Dirigenza, Staff tecnico]
       - name: foto
-        label: Foto
+        label: Foto (organigramma / elenco)
+        type: image
+      - name: foto_scheda
+        label: Foto per la scheda personale (facoltativa; se vuota usa quella sopra)
         type: image
       - name: data_nascita
         label: Data di nascita (facoltativa)

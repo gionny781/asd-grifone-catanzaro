@@ -309,7 +309,7 @@
         !giocatore ? ['Area', dir ? 'Dirigenza' : 'Staff tecnico'] : null,
       ].filter((x) => x && x[1]);
       schedaEl.innerHTML = `
-        <div class="s-foto reveal">${p.foto ? `<img src="${esc(img(p.foto))}" alt="${esc(p.nome)}">` : '<div class="s-nofoto"><img src="images/logo.png" alt=""></div>'}
+        <div class="s-foto reveal">${p.foto_scheda || p.foto ? `<img src="${esc(img(p.foto_scheda || p.foto))}" alt="${esc(p.nome)}">` : '<div class="s-nofoto"><img src="images/logo.png" alt=""></div>'}
           ${giocatore && p.numero ? `<span class="s-num">${esc(p.numero)}</span>` : ''}</div>
         <div class="s-dati reveal">
           <h2>Dati anagrafici</h2>
