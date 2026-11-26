@@ -184,7 +184,7 @@
       }
       newsList.innerHTML = l.slice(0, shown).map((n) => `
         <button class="nc reveal stagger" data-i="${all.indexOf(n)}">
-          <div class="img${n.foto ? '' : ' noimg'}"><img src="${n.foto ? esc(img(n.foto)) : 'images/logo.png'}" alt="" loading="lazy"></div>
+          <div class="img${n.foto ? '' : ' noimg'}${n.categoria === 'Prossima partita' ? ' poster' : ''}"><img src="${n.foto ? esc(img(n.foto)) : 'images/logo.png'}" alt="" loading="lazy"></div>
           <div class="t">
             <span class="cat">${esc(n.categoria || 'News')}${n.data ? ' · ' + fmtData(n.data) : ''}</span>
             <span class="tit">${esc(n.titolo)}</span>
@@ -205,7 +205,15 @@
     });
     if (more) more.addEventListener('click', () => { shown += step; render(); });
     load('news').then((n) => {
-      all = arr(n).filter((x) => x && x.titolo).sort(byDate);
+      // News temporanee: spariscono da sole (scade_il, oppure 7 giorni dopo la data se "temporanea")
+      const oggi = new Date();
+      const scaduta = (x) => {
+        let fine = null;
+        if (x.scade_il) fine = new Date(`${x.scade_il}T23:59:59`);
+        else if (x.temporanea === true && x.data) { fine = new Date(`${x.data}T23:59:59`); fine.setDate(fine.getDate() + 7); }
+        return fine && !isNaN(fine) && oggi > fine;
+      };
+      all = arr(n).filter((x) => x && x.titolo && !scaduta(x)).sort(byDate);
       if (filters) {
         const cats = [...new Set(all.map((x) => x.categoria).filter(Boolean))];
         if (cats.length > 1) {

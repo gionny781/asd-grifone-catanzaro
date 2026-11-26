@@ -185,7 +185,7 @@ content:
         label: Categoria
         type: select
         options:
-          values: [Prima squadra, Società, Settore giovanile, Eventi]
+          values: [Prossima partita, Prima squadra, Società, Settore giovanile, Eventi]
       - name: foto
         label: Foto di copertina
         type: image
@@ -195,6 +195,12 @@ content:
       - name: testo
         label: Testo completo
         type: text
+      - name: temporanea
+        label: Sparisce da sola 7 giorni dopo la data (es. locandine delle partite)
+        type: boolean
+      - name: scade_il
+        label: Oppure nascondi dopo questo giorno (facoltativo, vince sull'opzione sopra)
+        type: date
 
   - name: gallery
     label: Fotogallery (un carosello per ogni galleria)
