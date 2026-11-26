@@ -1,10 +1,20 @@
 [
   {
-    "titolo": "Vigor Catanzaro - ASD Grifone - 18.02.2023",
+    "titolo": "Foto della Stagione 2022 - 2023",
     "album": "Stagione 2022 - 2023",
     "data": "2023-02-18",
-    "foto": [
-      "images/uploads/WhatsApp Image 2023-02-19 at 17.22.43 (1) copia.jpg"
+    "foto_didascalia": [
+      {
+        "immagine": "images/uploads/WhatsApp Image 2023-02-19 at 17.22.43 (1) copia-1.jpg",
+        "didascalia": "Vigor Catanzaro - ASD Grifone - 18.02.2023"
+      },
+      {
+        "immagine": "images/uploads/Foto Squadra 1^ di Campionato (1).jpeg",
+        "didascalia": "1^ giornata di Campionato 2022-2023"
+      },
+      {
+        "immagine": "images/uploads/WhatsApp Image 2023-02-18 at 14.51.17.jpeg"
+      }
     ],
     "home": true
   }
