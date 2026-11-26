@@ -25,7 +25,10 @@ MENU = [
 ]
 
 
-def widget(kind, title, h, pad=False):
+def widget(kind, title, h, pad=False, mini=False):
+    if mini:  # versione rimpicciolita (Home): l'iframe resta 500px e viene scalato
+        return (f'<div class="widget mini"><div class="wscale" style="--h:{h}px"><iframe title="{title}" '
+                f'src="https://www.tuttocampo.it/WidgetV2/{kind}/{TT}" width="500" height="{h}" scrolling="no" loading="lazy"></iframe></div></div>')
     return (f'<div class="widget{" pad" if pad else ""}"><iframe title="{title}" '
             f'src="https://www.tuttocampo.it/WidgetV2/{kind}/{TT}" height="{h}" scrolling="no" loading="lazy"></iframe></div>')
 
@@ -139,25 +142,26 @@ PAGES["index.html"] = ("Home", "Sito ufficiale dell'A.S.D. Grifone Catanzaro: pr
   </div>
 </section>
 
-<div class="wrap match" id="partite">
-  <div class="grid2">
-    <div class="card gy reveal">
-      <div class="card-h"><h2>Prossima partita</h2></div>
-      {widget("ProssimaPartita", "Prossima partita del Grifone", 350)}
-    </div>
-    <div class="card gr reveal">
-      <div class="card-h"><h2>Ultimo risultato</h2></div>
-      {widget("Partita", "Ultimo risultato del Grifone", 350)}
-    </div>
-  </div>
-</div>
-
-<section class="blk" id="team-block" hidden><div class="wrap">
+<section class="team-top" id="team-block" hidden><div class="wrap">
   <figure class="teamphoto reveal">
     <img id="team-img" src="" alt="Foto di squadra dell'A.S.D. Grifone Catanzaro">
     <figcaption><span class="oswald" id="team-cap">La nostra squadra</span><a class="btn g" href="squadra.html">Scopri la rosa</a></figcaption>
   </figure>
 </div></section>
+
+<div class="wrap match-mini" id="partite">
+  <div class="grid2">
+    <div class="card gy reveal">
+      <div class="card-h"><h2>Prossima partita</h2></div>
+      {widget("ProssimaPartita", "Prossima partita del Grifone", 350, mini=True)}
+    </div>
+    <div class="card gr reveal">
+      <div class="card-h"><h2>Ultimo risultato</h2></div>
+      {widget("Partita", "Ultimo risultato del Grifone", 350, mini=True)}
+    </div>
+  </div>
+</div>
+
 
 {CAR.format(where="home")}
 

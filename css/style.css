@@ -179,6 +179,19 @@ footer a:hover{color:var(--giallo);padding-left:4px}
 .sec-h a{font-weight:600;font-size:15px}
 .dark-sec .sec-h a{color:var(--giallo)}
 
+/* home: foto squadra sopra, partite piccole sotto */
+.team-top{position:relative;z-index:2;margin-top:-64px}
+.match-mini{position:relative;z-index:2;padding-top:40px}
+.hero + .team-top[hidden] + .match-mini{margin-top:-64px;padding-top:0}
+.match-mini .grid2{grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));max-width:880px;margin:0 auto}
+.match-mini .card-h{padding:12px 16px}
+.match-mini .card-h h2{font-size:18px}
+.widget.mini{padding:0 12px 12px}
+.wscale{--s:.72;width:calc(500px * var(--s));height:calc(var(--h) * var(--s));overflow:hidden;max-width:100%}
+.widget.mini iframe{width:500px;max-width:none;height:var(--h);transform:scale(var(--s));transform-origin:0 0}
+@media (max-width:420px){.wscale{--s:.62}}
+@media (max-width:360px){.wscale{--s:.56}}
+
 /* foto squadra */
 .teamphoto{position:relative;margin:0;overflow:hidden;box-shadow:0 14px 40px rgba(11,31,20,.2);border-bottom:6px solid var(--giallo)}
 .teamphoto img{width:100%;max-height:620px;object-fit:cover;transition:transform 1.2s var(--ease)}
