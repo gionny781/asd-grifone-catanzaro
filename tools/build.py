@@ -244,8 +244,8 @@ PAGES["societa.html"] = ("Società", "Chi siamo: storia, dirigenza e contatti de
   </aside>
 </div></section>
 <section class="blk pb"><div class="wrap">
-  <div class="sec-h reveal"><h2>Dirigenza</h2></div>
-  <div class="people" id="staff-dirigenza"></div>
+  <div class="sec-h center reveal"><h2>Organigramma</h2></div>
+  <div class="org" id="staff-dirigenza"></div>
 </div></section>''')
 
 PAGES["galleria.html"] = ("Foto e video", "Foto e video delle partite dell'A.S.D. Grifone Catanzaro.", page_head("Foto e video", "Le immagini e i video delle nostre partite.") + '''

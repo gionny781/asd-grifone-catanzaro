@@ -99,7 +99,7 @@ content:
         type: string
         required: true
       - name: ruolo
-        label: Ruolo (es. Presidente, Allenatore, Preparatore dei portieri)
+        label: Ruolo (es. Presidente, Vicepresidente, Allenatore). Persone con lo stesso ruolo vengono raggruppate; l'ordine nell'elenco è l'ordine dell'organigramma
         type: string
       - name: area
         label: Dove mostrarlo

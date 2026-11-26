@@ -258,7 +258,21 @@
         watch(el);
       };
       fill(tecnico, 'Staff tecnico', 'Lo staff tecnico sarà pubblicato a breve.');
-      fill(dirig, 'Dirigenza', "L'organigramma sarà pubblicato a breve.");
+      // Organigramma: un blocco per ruolo, nell'ordine in cui compaiono nel pannello
+      if (dirig) {
+        const g = list.filter((x) => (x.area || 'Dirigenza') === 'Dirigenza');
+        if (!g.length) { dirig.innerHTML = '<div class="empty">L\'organigramma sarà pubblicato a breve.</div>'; return; }
+        const ruoli = [...new Set(g.map((x) => (x.ruolo || 'Dirigenti').trim()))];
+        dirig.innerHTML = ruoli.map((r) => {
+          const persone = g.filter((x) => (x.ruolo || 'Dirigenti').trim() === r);
+          return `<div class="org-row reveal"><h3>${esc(r)}</h3><div class="org-people">${persone.map((p) => `
+            <div class="op">
+              <div class="op-img">${p.foto ? `<img src="${esc(img(p.foto))}" alt="${esc(p.nome)}" loading="lazy">` : '<img class="logo" src="images/logo.png" alt="">'}</div>
+              <span>${esc(p.nome)}</span>
+            </div>`).join('')}</div></div>`;
+        }).join('');
+        watch(dirig);
+      }
     });
   }
 

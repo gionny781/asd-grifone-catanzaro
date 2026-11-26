@@ -231,6 +231,22 @@ footer a:hover{color:var(--giallo);padding-left:4px}
 .cta h2{margin:0;color:var(--giallo)}
 .cta p{margin:0 0 8px;color:#D6E8DC}
 
+/* organigramma */
+.sec-h.center{justify-content:center}
+.sec-h.center h2::after{left:50%;transform:translateX(-50%)}
+.org{max-width:900px;margin:0 auto;display:flex;flex-direction:column;align-items:center}
+.org-row{width:100%;display:flex;flex-direction:column;align-items:center;gap:16px;padding:28px 0;position:relative}
+.org-row+.org-row::before{content:"";position:absolute;top:-14px;left:50%;width:3px;height:28px;background:var(--giallo);transform:translateX(-50%)}
+.org-row h3{margin:0;background:var(--verde);color:#fff;font-family:Oswald,sans-serif;font-size:20px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;padding:8px 22px;text-align:center;transition:background .3s,transform .3s var(--ease)}
+.org-row:hover h3{background:var(--scuro);transform:scale(1.04)}
+.org-people{display:flex;flex-wrap:wrap;justify-content:center;gap:20px}
+.op{width:160px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.op-img{width:130px;height:130px;border-radius:50%;overflow:hidden;border:5px solid var(--giallo);background:repeating-linear-gradient(90deg,var(--verde2) 0 18px,var(--verde) 18px 36px);box-shadow:0 6px 18px rgba(11,31,20,.15);transition:transform .35s var(--ease),border-color .3s,box-shadow .35s}
+.op-img img{width:100%;height:100%;object-fit:cover}
+.op-img img.logo{width:62%;height:auto;margin:19% auto 0;object-fit:contain}
+.op:hover .op-img{transform:translateY(-6px) scale(1.05);border-color:var(--verde);box-shadow:0 14px 28px rgba(11,31,20,.25)}
+.op span{font-family:Oswald,sans-serif;font-size:18px;font-weight:600;text-transform:uppercase;line-height:1.2}
+
 /* contatti */
 .contacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:24px;align-items:start}
 .mapbox{aspect-ratio:4/3;background:#E6E4DA}
