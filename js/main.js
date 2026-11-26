@@ -197,7 +197,7 @@
       watch(newsList);
     };
     const openNews = (n) => open(`<article class="art">
-        ${n.foto ? `<img src="${esc(img(n.foto))}" alt="">` : ''}
+        ${n.foto ? `<div class="imgwrap"><img src="${esc(img(n.foto))}" alt=""></div>` : ''}
         <div class="in"><span class="cat" style="color:var(--verde);font-weight:700;font-size:13px;letter-spacing:1.5px;text-transform:uppercase">${esc(n.categoria || 'News')}${n.data ? ' · ' + fmtData(n.data) : ''}</span>
         <h3 id="modal-title">${esc(n.titolo)}</h3>${paras(n.testo || n.sommario)}</div></article>`);
     newsList.addEventListener('click', (e) => {

@@ -160,7 +160,9 @@ footer a:hover{color:var(--giallo);padding-left:4px}
 .modal-box.photo p{color:#fff;text-align:center;margin:10px 0 0}
 .modal-x{position:absolute;top:8px;right:8px;width:44px;height:44px;border:0;border-radius:50%;background:var(--giallo);color:var(--scuro);font-size:28px;line-height:1;cursor:pointer;z-index:2}
 .modal-box.photo .modal-x{top:-12px;right:-12px}
-.art img{width:100%;max-height:420px;object-fit:cover}
+.art img{display:block;width:auto;max-width:100%;height:auto;max-height:75vh;margin:0 auto;object-fit:contain}
+.art>img{background:var(--scuro)}
+.art .imgwrap{background:var(--scuro);display:flex;justify-content:center}
 .art .in{padding:28px 32px 36px}
 .art h3{margin:6px 0 16px;font-family:Oswald,sans-serif;font-size:34px;line-height:1.1;text-transform:uppercase}
 .art p{font-size:17px;line-height:1.65;margin:0 0 14px}
