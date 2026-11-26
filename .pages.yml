@@ -28,6 +28,39 @@ content:
         label: Email di contatto
         type: string
 
+  - name: contatti
+    label: Contatti e mappe
+    type: file
+    path: data/contatti.json
+    format: json
+    fields:
+      - name: stadio_nome
+        label: Nome dello stadio / campo
+        type: string
+      - name: stadio_indirizzo
+        label: Indirizzo dello stadio (per la mappa)
+        type: string
+      - name: sede_indirizzo
+        label: Indirizzo della sede legale (per la mappa)
+        type: string
+      - name: telefono
+        label: Telefono generale (facoltativo)
+        type: string
+      - name: contatti
+        label: Contatti utili
+        type: object
+        list: true
+        fields:
+          - name: area
+            label: Area (es. Segreteria)
+            type: string
+          - name: email
+            label: Email
+            type: string
+          - name: telefono
+            label: Telefono (facoltativo)
+            type: string
+
   - name: calciatori
     label: Calciatori
     type: file

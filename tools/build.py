@@ -21,6 +21,7 @@ MENU = [
     ("societa.html", "Società"),
     ("galleria.html", "Foto e video"),
     ("partner.html", "Partner"),
+    ("contatti.html", "Contatti"),
 ]
 
 
@@ -263,6 +264,24 @@ PAGES["partner.html"] = ("Partner", "I partner e gli sponsor che sostengono l'A.
     <h2>Diventa partner del Grifone</h2>
     <p>Vuoi legare il nome della tua attività alla squadra? Scrivici sui nostri canali social.</p>
     <a class="btn g" href="https://www.facebook.com/profile.php?id=100087152842746" target="_blank" rel="noopener">Contattaci su Facebook</a>
+  </div>
+</div></section>''')
+
+PAGES["contatti.html"] = ("Contatti", "Contatti, sede legale e campo di gioco dell'A.S.D. Grifone Catanzaro.", page_head("Contatti", "Dove trovarci e come scriverci.") + '''
+<section class="blk pb"><div class="wrap">
+  <div class="contacts">
+    <div class="card gr reveal map-card" id="map-stadio" hidden>
+      <div class="mapbox"></div>
+      <div class="map-info"><h2>Stadio</h2><p class="addr"></p><a class="maplink" target="_blank" rel="noopener">Apri in Google Maps →</a></div>
+    </div>
+    <div class="card gy reveal map-card" id="map-sede" hidden>
+      <div class="mapbox"></div>
+      <div class="map-info"><h2>Sede legale</h2><p class="addr"></p><a class="maplink" target="_blank" rel="noopener">Apri in Google Maps →</a></div>
+    </div>
+    <div class="card reveal">
+      <div class="card-h dark"><h2>Contatti utili</h2></div>
+      <div class="clist" id="contact-list"></div>
+    </div>
   </div>
 </div></section>''')
 

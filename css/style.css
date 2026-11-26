@@ -231,6 +231,21 @@ footer a:hover{color:var(--giallo);padding-left:4px}
 .cta h2{margin:0;color:var(--giallo)}
 .cta p{margin:0 0 8px;color:#D6E8DC}
 
+/* contatti */
+.contacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:24px;align-items:start}
+.mapbox{aspect-ratio:4/3;background:#E6E4DA}
+.mapbox iframe{width:100%;height:100%;border:0;display:block}
+.map-info{padding:18px 20px 22px}
+.map-info h2{margin:0 0 6px;font-family:Oswald,sans-serif;font-size:26px;text-transform:uppercase}
+.map-info .addr{margin:0 0 10px;color:var(--grigio)}
+.maplink{font-weight:700;font-size:14px}
+.clist{padding:8px 20px 20px}
+.ci{display:flex;flex-direction:column;gap:3px;padding:14px 0;border-bottom:1px solid #ECEAE2;transition:padding .25s}
+.ci:last-child{border-bottom:0}
+.ci:hover{padding-left:6px}
+.ci b{font-family:Oswald,sans-serif;font-size:18px;text-transform:uppercase;color:var(--verde)}
+.ci a{overflow-wrap:anywhere;font-weight:600}
+
 /* scroll reveal */
 .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .reveal.in{opacity:1;transform:none}

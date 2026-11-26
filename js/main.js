@@ -262,6 +262,33 @@
     });
   }
 
+  /* ---------- CONTATTI ---------- */
+  const contactList = $('#contact-list');
+  if (contactList) {
+    const mapUrl = (a) => `https://maps.google.com/maps?q=${encodeURIComponent(a)}&z=16&output=embed`;
+    const linkUrl = (a) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(a)}`;
+    const fillMap = (id, titolo, indirizzo) => {
+      const el = $(id);
+      if (!el || !indirizzo) return;
+      el.querySelector('.mapbox').innerHTML = `<iframe title="Mappa: ${esc(titolo)}" src="${mapUrl(indirizzo)}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`;
+      el.querySelector('.addr').textContent = indirizzo;
+      el.querySelector('.maplink').href = linkUrl(indirizzo);
+      if (titolo) el.querySelector('h2').textContent = titolo;
+      el.hidden = false;
+    };
+    load('contatti').then((c) => {
+      c = c && typeof c === 'object' && !Array.isArray(c) ? c : {};
+      fillMap('#map-stadio', c.stadio_nome || 'Stadio', c.stadio_indirizzo);
+      fillMap('#map-sede', 'Sede legale', c.sede_indirizzo);
+      const tel = (t) => `<a href="tel:${esc(String(t).replace(/[^+\d]/g, ''))}">${esc(t)}</a>`;
+      const rows = arr(c.contatti).filter((x) => x && (x.email || x.telefono));
+      if (c.telefono) rows.unshift({ area: 'Telefono', telefono: c.telefono });
+      contactList.innerHTML = rows.length ? rows.map((x) => `<div class="ci"><b>${esc(x.area || 'Contatto')}</b>
+        ${x.email ? `<a href="mailto:${esc(x.email)}">${esc(x.email)}</a>` : ''}${x.telefono ? tel(x.telefono) : ''}</div>`).join('')
+        : '<div class="empty">I contatti saranno pubblicati a breve.</div>';
+    });
+  }
+
   /* ---------- SPONSOR ---------- */
   const sponsorList = $('#sponsor-list');
   if (sponsorList) {
