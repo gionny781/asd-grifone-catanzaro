@@ -3,6 +3,80 @@ media:
   output: images/uploads
 
 content:
+  - name: societa
+    label: Società (chi siamo e foto squadra)
+    type: file
+    path: data/societa.json
+    format: json
+    fields:
+      - name: foto_squadra
+        label: Foto della squadra (appare in Home e nella pagina Squadra)
+        type: image
+      - name: didascalia_foto
+        label: Didascalia foto squadra (es. Stagione 2026/27)
+        type: string
+      - name: chi_siamo
+        label: Chi siamo (storia e presentazione; lascia una riga vuota tra i paragrafi)
+        type: text
+      - name: fondazione
+        label: Anno di fondazione
+        type: string
+      - name: campo
+        label: Campo di gioco
+        type: string
+      - name: email
+        label: Email di contatto
+        type: string
+
+  - name: calciatori
+    label: Calciatori
+    type: file
+    path: data/calciatori.json
+    format: json
+    list: true
+    fields:
+      - name: nome
+        label: Nome e cognome
+        type: string
+        required: true
+      - name: numero
+        label: Numero di maglia
+        type: string
+      - name: ruolo
+        label: Ruolo
+        type: select
+        options:
+          values: [Portiere, Difensore, Centrocampista, Attaccante]
+      - name: anno_nascita
+        label: Anno di nascita
+        type: string
+      - name: foto
+        label: Foto
+        type: image
+
+  - name: staff
+    label: Staff e dirigenza
+    type: file
+    path: data/staff.json
+    format: json
+    list: true
+    fields:
+      - name: nome
+        label: Nome e cognome
+        type: string
+        required: true
+      - name: ruolo
+        label: Ruolo (es. Presidente, Allenatore, Preparatore dei portieri)
+        type: string
+      - name: area
+        label: Dove mostrarlo
+        type: select
+        options:
+          values: [Dirigenza, Staff tecnico]
+      - name: foto
+        label: Foto
+        type: image
+
   - name: news
     label: News
     type: file

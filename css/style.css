@@ -164,6 +164,73 @@ footer a:hover{color:var(--giallo);padding-left:4px}
 @keyframes fade{from{opacity:0}}
 @keyframes pop{from{opacity:0;transform:scale(.94) translateY(20px)}}
 
+
+/* ---------- pagine interne ---------- */
+.oswald{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.5px}
+.phero{color:#fff;background-color:var(--verde);background-image:repeating-linear-gradient(90deg,var(--verde2) 0 72px,var(--verde) 72px 144px);background-size:144px 100%;animation:stripes 30s linear infinite;border-bottom:6px solid var(--giallo)}
+.phero .wrap{padding-top:56px;padding-bottom:56px}
+.phero h1{margin:0 0 10px;font-family:Oswald,sans-serif;font-size:clamp(40px,6vw,64px);line-height:1;text-transform:uppercase}
+.phero p{margin:0;font-size:18px;color:#E6F2EA;max-width:640px}
+.pb{padding-bottom:64px}
+.narrow{max-width:620px;margin:0 auto}
+.stack2{display:flex;flex-direction:column;gap:20px}
+.dark-sec.flat{margin-top:0}
+.sec-h a{font-weight:600;font-size:15px}
+.dark-sec .sec-h a{color:var(--giallo)}
+
+/* foto squadra */
+.teamphoto{position:relative;margin:0;overflow:hidden;box-shadow:0 14px 40px rgba(11,31,20,.2);border-bottom:6px solid var(--giallo)}
+.teamphoto img{width:100%;max-height:620px;object-fit:cover;transition:transform 1.2s var(--ease)}
+.teamphoto:hover img{transform:scale(1.04)}
+.teamphoto figcaption{position:absolute;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;padding:60px 28px 24px;background:linear-gradient(transparent,rgba(11,31,20,.85));color:#fff}
+.teamphoto figcaption span{font-size:clamp(22px,3vw,32px);font-weight:700}
+
+/* chi siamo (home) */
+.about{display:flex;flex-wrap:wrap;gap:32px;align-items:center;background:#fff;padding:36px;border-left:0;box-shadow:0 2px 10px rgba(11,31,20,.06)}
+.about img{width:140px;flex:0 0 auto;transition:transform .6s var(--ease)}
+.about:hover img{transform:rotate(-6deg) scale(1.05)}
+.about>div{flex:1 1 320px}
+.about h2{margin:0 0 10px;font-family:Oswald,sans-serif;font-size:32px;text-transform:uppercase}
+.about p{margin:0 0 18px;font-size:17px;line-height:1.6;color:var(--grigio)}
+
+/* filtri news */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.filters button{border:2px solid var(--verde);background:#fff;color:var(--verde);padding:9px 16px;font-weight:600;font-size:14px;cursor:pointer;transition:background .2s,color .2s,transform .2s}
+.filters button:hover{transform:translateY(-2px)}
+.filters button.on{background:var(--verde);color:#fff}
+
+/* rosa e staff */
+.ruolo{margin-bottom:48px}
+.ruolo h2{margin:0 0 20px;font-family:Oswald,sans-serif;font-size:30px;text-transform:uppercase;display:flex;align-items:center;gap:12px}
+.ruolo h2 small{font-family:Inter,sans-serif;font-size:14px;font-weight:600;background:var(--giallo);color:var(--scuro);padding:3px 10px;border-radius:20px}
+.people{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px}
+.pc{position:relative;background:#fff;overflow:hidden;box-shadow:0 2px 10px rgba(11,31,20,.08);transition:transform .35s var(--ease),box-shadow .35s}
+.pc:hover{transform:translateY(-8px);box-shadow:0 18px 36px rgba(11,31,20,.18)}
+.pc .pimg{position:relative;aspect-ratio:4/5;overflow:hidden;background:repeating-linear-gradient(90deg,var(--verde2) 0 24px,var(--verde) 24px 48px)}
+.pc .pimg img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.pc .pimg img.logo{width:55%;height:auto;margin:22% auto 0;object-fit:contain;opacity:.9}
+.pc:hover .pimg img{transform:scale(1.07)}
+.pc .num{position:absolute;top:8px;left:12px;font-family:Oswald,sans-serif;font-size:56px;font-weight:700;line-height:1;color:var(--giallo);text-shadow:0 3px 10px rgba(0,0,0,.45);transition:transform .35s var(--ease)}
+.pc:hover .num{transform:scale(1.15) rotate(-6deg)}
+.pc .info{padding:14px 16px 16px;border-top:5px solid var(--giallo);transition:border-color .3s}
+.pc:hover .info{border-color:var(--verde)}
+.pc .nome{display:block;font-family:Oswald,sans-serif;font-size:20px;font-weight:600;text-transform:uppercase;line-height:1.15}
+.pc .ruo{display:block;font-size:14px;color:var(--grigio);margin-top:3px}
+
+/* società */
+.prose p{font-size:17px;line-height:1.7;margin:0 0 16px}
+.facts{margin:0;padding:6px 20px 18px}
+.facts div{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #ECEAE2}
+.facts div:last-child{border-bottom:0}
+.facts dt{color:var(--grigio);font-size:14px}
+.facts dd{margin:0;font-weight:700;text-align:right;overflow-wrap:anywhere}
+
+/* partner page */
+.plogos.big .pl{height:150px}
+.cta{margin-top:48px;background:var(--scuro);color:#fff;padding:40px 28px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.cta h2{margin:0;color:var(--giallo)}
+.cta p{margin:0 0 8px;color:#D6E8DC}
+
 /* scroll reveal */
 .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .reveal.in{opacity:1;transform:none}

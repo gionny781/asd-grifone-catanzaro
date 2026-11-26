@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>A.S.D. Grifone Catanzaro – Sito ufficiale</title>
-<meta name="description" content="Sito ufficiale dell'A.S.D. Grifone Catanzaro: risultati, classifica, marcatori, news e foto della squadra giallo-verde.">
-<meta property="og:title" content="A.S.D. Grifone Catanzaro">
-<meta property="og:description" content="Risultati, classifica, marcatori e news del Grifone. Omnia pro tibi, nihil sine te.">
+<meta name="description" content="Sito ufficiale dell'A.S.D. Grifone Catanzaro: prossima partita, risultati, classifica, news e foto della squadra giallo-verde.">
+<meta property="og:title" content="A.S.D. Grifone Catanzaro – Sito ufficiale">
+<meta property="og:description" content="Sito ufficiale dell'A.S.D. Grifone Catanzaro: prossima partita, risultati, classifica, news e foto della squadra giallo-verde.">
 <meta property="og:image" content="images/logo.png">
 <meta name="theme-color" content="#0B5A2C">
 <link rel="icon" href="images/favicon.png">
@@ -14,7 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body data-page="index">
 
 <div class="topbar"><div class="wrap">
   <span>Via Magna Grecia, 51/B – Catanzaro</span>
@@ -27,31 +27,32 @@
 </div></div>
 
 <header id="top"><div class="wrap">
-  <a class="brand" href="#">
+  <a class="brand" href="index.html">
     <img src="images/logo.png" alt="Stemma A.S.D. Grifone Catanzaro">
     <span><b>Grifone</b><small>A.S.D. Catanzaro</small></span>
   </a>
   <button class="burger" aria-label="Apri il menu" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
   <nav class="menu" id="menu" aria-label="Menu principale">
-    <a href="#">Home</a>
-    <a href="#news">News</a>
-    <a href="#partite">Partite</a>
-    <a href="#classifica">Classifica</a>
-    <a href="#risultati">Risultati</a>
-    <a href="#gallery">Foto e video</a>
-    <a href="#partner">Partner</a>
+    <a href="index.html" class="on" aria-current="page">Home</a>
+    <a href="news.html">News</a>
+    <a href="classifica.html">Classifica</a>
+    <a href="squadra.html">Squadra</a>
+    <a href="societa.html">Società</a>
+    <a href="galleria.html">Foto e video</a>
+    <a href="partner.html">Partner</a>
   </nav>
 </div></header>
 
+<main>
 <section class="hero">
   <div class="wrap">
     <div class="hero-txt">
       <span class="tag reveal">Calcio dilettantistico · Catanzaro</span>
       <h1 class="reveal">Omnia pro tibi,<br><span>nihil sine te</span></h1>
-      <p class="reveal">Tutto per te, niente senza di te. Il sito ufficiale del Grifone: risultati, classifica, news e la vita della società in giallo e verde.</p>
+      <p class="reveal">Tutto per te, niente senza di te. Il sito ufficiale del Grifone: partite, classifica, news e la vita della società in giallo e verde.</p>
       <div class="btns reveal">
-        <a class="btn g" href="#partite">Prossima partita</a>
-        <a class="btn o" href="#classifica">Classifica</a>
+        <a class="btn g" href="classifica.html">Classifica</a>
+        <a class="btn o" href="squadra.html">La squadra</a>
       </div>
     </div>
     <div class="hero-logo"><img src="images/logo.png" alt="" aria-hidden="true"></div>
@@ -65,52 +66,45 @@
       <div class="widget"><iframe title="Prossima partita del Grifone" src="https://www.tuttocampo.it/WidgetV2/ProssimaPartita/fb7bef38-b96a-496d-a2a6-3963b61bf1c1" height="350" scrolling="no" loading="lazy"></iframe></div>
     </div>
     <div class="card gr reveal">
-      <div class="card-h"><h2>Ultima partita</h2></div>
-      <div class="widget"><iframe title="Ultima partita del Grifone" src="https://www.tuttocampo.it/WidgetV2/Partita/fb7bef38-b96a-496d-a2a6-3963b61bf1c1" height="350" scrolling="no" loading="lazy"></iframe></div>
+      <div class="card-h"><h2>Ultimo risultato</h2></div>
+      <div class="widget"><iframe title="Ultimo risultato del Grifone" src="https://www.tuttocampo.it/WidgetV2/Partita/fb7bef38-b96a-496d-a2a6-3963b61bf1c1" height="350" scrolling="no" loading="lazy"></iframe></div>
     </div>
   </div>
 </div>
 
-<section class="blk"><div class="wrap cols">
-  <div class="main" id="news">
-    <div class="sec-h reveal"><h2>Ultime news</h2></div>
-    <div class="news" id="news-list"></div>
-    <button class="more" id="news-more" hidden>Mostra altre news</button>
-  </div>
-  <aside class="side" id="classifica">
-    <div class="card reveal">
-      <div class="card-h dark"><h2>Classifica</h2></div>
-      <div class="widget pad"><iframe title="Classifica del campionato" src="https://www.tuttocampo.it/WidgetV2/Classifica/fb7bef38-b96a-496d-a2a6-3963b61bf1c1" height="800" scrolling="no" loading="lazy"></iframe></div>
-    </div>
-  </aside>
+<section class="blk" id="team-block" hidden><div class="wrap">
+  <figure class="teamphoto reveal">
+    <img id="team-img" src="" alt="Foto di squadra dell'A.S.D. Grifone Catanzaro">
+    <figcaption><span class="oswald" id="team-cap">La nostra squadra</span><a class="btn g" href="squadra.html">Scopri la rosa</a></figcaption>
+  </figure>
 </div></section>
 
-<section class="blk" id="risultati"><div class="wrap">
-  <div class="sec-h reveal"><h2>Risultati e marcatori</h2></div>
-  <div class="grid2">
-    <div class="card gr reveal">
-      <div class="card-h"><h2>Risultati</h2></div>
-      <div class="widget"><iframe title="Risultati del campionato" src="https://www.tuttocampo.it/WidgetV2/Risultati/fb7bef38-b96a-496d-a2a6-3963b61bf1c1" height="600" scrolling="no" loading="lazy"></iframe></div>
-    </div>
-    <div class="card gy reveal">
-      <div class="card-h"><h2>Classifica marcatori</h2></div>
-      <div class="widget"><iframe title="Classifica marcatori" src="https://www.tuttocampo.it/WidgetV2/Marcatori/fb7bef38-b96a-496d-a2a6-3963b61bf1c1" height="700" scrolling="no" loading="lazy"></iframe></div>
+<section class="blk"><div class="wrap">
+  <div class="sec-h reveal"><h2>Ultime news</h2><a href="news.html">Tutte le news →</a></div>
+  <div class="news" id="news-list" data-limit="3"></div>
+</div></section>
+
+<section class="blk" id="about-block" hidden><div class="wrap">
+  <div class="about reveal">
+    <img src="images/logo.png" alt="" aria-hidden="true">
+    <div>
+      <h2>Chi siamo</h2>
+      <p id="about-teaser"></p>
+      <a class="btn g" href="societa.html">La società</a>
     </div>
   </div>
 </div></section>
 
-<section class="dark-sec" id="gallery"><div class="wrap">
-  <div class="sec-h reveal"><h2>Video &amp; <span>Fotogallery</span></h2></div>
-  <div class="videos" id="video-list"></div>
-  <div class="photos" id="photo-list"></div>
-  <button class="more light" id="photo-more" hidden>Mostra altre foto</button>
+<section class="dark-sec" id="home-gallery" hidden><div class="wrap">
+  <div class="sec-h reveal"><h2>Ultime <span>foto</span></h2><a href="galleria.html">Tutta la gallery →</a></div>
+  <div class="photos" id="photo-list" data-limit="4"></div>
 </div></section>
 
-<section class="partners" id="partner"><div class="wrap">
+<section class="partners"><div class="wrap">
   <h2 class="reveal">I nostri partner</h2>
   <div class="plogos" id="sponsor-list"></div>
-  <p class="reveal">Vuoi diventare partner del Grifone? <a href="https://www.facebook.com/profile.php?id=100087152842746" target="_blank" rel="noopener">Scrivici su Facebook</a></p>
 </div></section>
+</main>
 
 <footer>
   <div class="wrap top">
@@ -118,7 +112,15 @@
       <img src="images/logo.png" alt="Stemma A.S.D. Grifone Catanzaro">
       <div><div class="ftitle">A.S.D. Grifone Catanzaro</div><div class="fsub">Omnia pro tibi, nihil sine te</div></div>
     </div>
-    <div class="fcol"><span class="h">Dove siamo</span><span>Via Magna Grecia, 51/B</span><span>Catanzaro</span></div>
+    <div class="fcol"><span class="h">Dove siamo</span><span>Via Magna Grecia, 51/B</span><span>Catanzaro</span><span class="f-email"></span></div>
+    <div class="fcol"><span class="h">Il sito</span>
+      <a href="news.html">News</a>
+      <a href="classifica.html">Classifica</a>
+      <a href="squadra.html">Squadra</a>
+      <a href="societa.html">Società</a>
+      <a href="galleria.html">Foto e video</a>
+      <a href="partner.html">Partner</a>
+    </div>
     <div class="fcol"><span class="h">Seguici</span>
       <a href="https://www.facebook.com/profile.php?id=100087152842746" target="_blank" rel="noopener">Facebook</a>
       <a href="https://instagram.com/asdgrifonecz" target="_blank" rel="noopener">Instagram</a>
