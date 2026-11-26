@@ -1,1 +1,8 @@
-[]
+[
+  {
+    "nome": "Marco Tarantino",
+    "ruolo": "Presidente",
+    "area": "Dirigenza",
+    "foto": "images/uploads/Foto Presidente.jpeg"
+  }
+]
