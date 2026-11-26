@@ -152,14 +152,14 @@ PAGES["index.html"] = ("Home", "Sito ufficiale dell'A.S.D. Grifone Catanzaro: pr
   </div>
 </div>
 
-{CAR.format(where="home")}
-
 <section class="blk" id="team-block" hidden><div class="wrap">
   <figure class="teamphoto reveal">
     <img id="team-img" src="" alt="Foto di squadra dell'A.S.D. Grifone Catanzaro">
     <figcaption><span class="oswald" id="team-cap">La nostra squadra</span><a class="btn g" href="squadra.html">Scopri la rosa</a></figcaption>
   </figure>
 </div></section>
+
+{CAR.format(where="home")}
 
 <section class="blk"><div class="wrap">
   <div class="sec-h reveal"><h2>Ultime news</h2><a href="news.html">Tutte le news →</a></div>
