@@ -122,12 +122,15 @@ content:
     format: json
     list: true
     fields:
+      - name: ordine
+        label: Posizione (numero più basso = più in alto; usa 10, 20, 30… così puoi inserire 15 in mezzo)
+        type: string
       - name: nome
         label: Nome e cognome
         type: string
         required: true
       - name: ruolo
-        label: Ruolo (es. Presidente, Vicepresidente, Allenatore). Persone con lo stesso ruolo vengono raggruppate; l'ordine nell'elenco è l'ordine dell'organigramma
+        label: Ruolo (es. Presidente, Vicepresidente, Allenatore). Persone con lo stesso ruolo vengono raggruppate
         type: string
       - name: area
         label: Dove mostrarlo

@@ -11,6 +11,11 @@
   };
   const byDate = (a, b) => String(b.data || '').localeCompare(String(a.data || ''));
   const arr = (x) => (Array.isArray(x) ? x : []);
+  // Ordina per il campo "Posizione" del pannello (10, 20, 15…); chi non ce l'ha resta in fondo, nell'ordine del pannello
+  const byOrdine = (list) => list
+    .map((x, i) => ({ x, i, o: parseFloat(String(x.ordine ?? '').replace(',', '.')) }))
+    .sort((a, b) => (isNaN(a.o) ? Infinity : a.o) - (isNaN(b.o) ? Infinity : b.o) || a.i - b.i)
+    .map((e) => e.x);
   const cache = {};
   const load = (f) => (cache[f] ||= fetch(`data/${f}.json`, { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : null)).catch(() => null));
   const show = (id, yes) => { const el = $(id); if (el) el.hidden = !yes; };
@@ -291,7 +296,7 @@
   const dirig = $('#staff-dirigenza');
   if (tecnico || dirig) {
     load('staff').then((s) => {
-      const list = arr(s).filter((x) => x && x.nome);
+      const list = byOrdine(arr(s).filter((x) => x && x.nome));
       const fill = (el, area, vuoto) => {
         if (!el) return;
         const g = list.filter((x) => (x.area || 'Dirigenza') === area);
@@ -324,7 +329,7 @@
     const tipo = q.get('t') === 'calciatori' ? 'calciatori' : 'staff';
     const nome = q.get('n') || '';
     load(tipo).then((d) => {
-      const list = arr(d).filter((x) => x && x.nome);
+      const list = tipo === 'staff' ? byOrdine(arr(d).filter((x) => x && x.nome)) : arr(d).filter((x) => x && x.nome);
       const isDir = (x) => (x.area || 'Dirigenza') === 'Dirigenza';
       const p = list.find((x) => slug(x.nome) === nome);
       const back = $('#p-back');

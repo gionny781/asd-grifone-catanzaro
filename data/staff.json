@@ -3,13 +3,15 @@
     "nome": "Domenico GRIMALDI",
     "ruolo": "PRESIDENTE ONORARIO",
     "area": "Dirigenza",
-    "foto": "images/uploads/Icona Grigone.png"
+    "foto": "images/uploads/Icona Grigone.png",
+    "ordine": "10"
   },
   {
     "nome": "Marco Tarantino",
     "ruolo": "Presidente",
     "area": "Dirigenza",
     "foto": "images/uploads/Foto Presidente.jpeg",
-    "foto_scheda": "images/uploads/Presidente.jpg"
+    "foto_scheda": "images/uploads/Presidente.jpg",
+    "ordine": "20"
   }
 ]
