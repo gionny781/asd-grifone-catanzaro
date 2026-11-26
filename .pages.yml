@@ -1,0 +1,86 @@
+media:
+  input: images/uploads
+  output: images/uploads
+
+content:
+  - name: news
+    label: News
+    type: file
+    path: data/news.json
+    format: json
+    list: true
+    fields:
+      - name: titolo
+        label: Titolo
+        type: string
+        required: true
+      - name: data
+        label: Data
+        type: date
+        required: true
+      - name: categoria
+        label: Categoria
+        type: select
+        options:
+          values: [Prima squadra, Società, Settore giovanile, Eventi]
+      - name: foto
+        label: Foto di copertina
+        type: image
+      - name: sommario
+        label: Sommario (1-2 righe)
+        type: text
+      - name: testo
+        label: Testo completo
+        type: text
+
+  - name: gallery
+    label: Fotogallery
+    type: file
+    path: data/gallery.json
+    format: json
+    list: true
+    fields:
+      - name: foto
+        label: Foto
+        type: image
+        required: true
+      - name: didascalia
+        label: Didascalia
+        type: string
+      - name: data
+        label: Data
+        type: date
+
+  - name: video
+    label: Video
+    type: file
+    path: data/video.json
+    format: json
+    list: true
+    fields:
+      - name: titolo
+        label: Titolo
+        type: string
+        required: true
+      - name: youtube
+        label: Link YouTube
+        type: string
+        required: true
+
+  - name: sponsor
+    label: Partner e sponsor
+    type: file
+    path: data/sponsor.json
+    format: json
+    list: true
+    fields:
+      - name: nome
+        label: Nome
+        type: string
+        required: true
+      - name: logo
+        label: Logo
+        type: image
+      - name: link
+        label: Sito web (facoltativo)
+        type: string
