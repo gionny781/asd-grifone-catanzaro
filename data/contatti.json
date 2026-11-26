@@ -1,12 +1,23 @@
 {
-  "stadio_nome": "",
-  "stadio_indirizzo": "",
+  "stadio_nome": "Centro Sportivo Santa Maria",
+  "stadio_indirizzo": "Via Liguria Catanzaro",
   "sede_indirizzo": "Via Magna Grecia, 51/B, Catanzaro",
-  "telefono": "",
   "contatti": [
-    { "area": "Amministrazione", "email": "amministrativa@asdgrifonecz.it", "telefono": "" },
-    { "area": "Segreteria", "email": "segreteria@asdgrifonecz.it", "telefono": "" },
-    { "area": "Comunicazioni", "email": "comunicazioni@asdgrifonecz.it", "telefono": "" },
-    { "area": "Webmaster", "email": "webmaster@asdgrifonecz.it", "telefono": "" }
+    {
+      "area": "Amministrazione",
+      "email": "amministrativa@asdgrifonecz.it"
+    },
+    {
+      "area": "Segreteria",
+      "email": "segreteria@asdgrifonecz.it"
+    },
+    {
+      "area": "Comunicazioni",
+      "email": "comunicazioni@asdgrifonecz.it"
+    },
+    {
+      "area": "Webmaster",
+      "email": "webmaster@asdgrifonecz.it"
+    }
   ]
 }
