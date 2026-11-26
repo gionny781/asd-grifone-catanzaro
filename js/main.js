@@ -159,6 +159,7 @@
       const qui = document.body.dataset.page === 'index' ? f.home !== false : f.pagina_squadra !== false;
       if (!foto || !qui) return;
       $('#team-img').src = img(foto);
+      if ($('#team-bg')) $('#team-bg').src = img(foto);
       const cap = f.didascalia || soc.didascalia_foto;
       if (cap) $('#team-cap').textContent = cap;
       show('#team-block', true);
@@ -184,7 +185,7 @@
       }
       newsList.innerHTML = l.slice(0, shown).map((n) => `
         <button class="nc reveal stagger" data-i="${all.indexOf(n)}">
-          <div class="img${n.foto ? '' : ' noimg'}${n.categoria === 'Prossima partita' ? ' poster' : ''}"><img src="${n.foto ? esc(img(n.foto)) : 'images/logo.png'}" alt="" loading="lazy"></div>
+          <div class="img${n.foto ? ' fit' : ' noimg'}${n.categoria === 'Prossima partita' ? ' poster' : ''}">${n.foto ? `<img class="blurbg" src="${esc(img(n.foto))}" alt="" aria-hidden="true" loading="lazy">` : ''}<img class="main" src="${n.foto ? esc(img(n.foto)) : 'images/logo.png'}" alt="" loading="lazy"></div>
           <div class="t">
             <span class="cat">${esc(n.categoria || 'News')}${n.data ? ' · ' + fmtData(n.data) : ''}</span>
             <span class="tit">${esc(n.titolo)}</span>
@@ -280,7 +281,8 @@
         <div class="car-bar" aria-hidden="true"></div>
         <div class="car-track" tabindex="0">${fotos.map((f, i) => `
           <button class="slide${i ? '' : ' on'}" data-i="${i}" aria-label="Foto ${i + 1} di ${fotos.length}${f.cap ? ': ' + esc(f.cap) : ''}. Apri a schermo intero">
-            <img src="${esc(img(f.src))}" alt="${esc(f.cap || titolo + ' – foto ' + (i + 1))}" ${i ? 'loading="lazy"' : ''}>
+            <img class="blurbg" src="${esc(img(f.src))}" alt="" aria-hidden="true" ${i ? 'loading="lazy"' : ''}>
+            <img class="main" src="${esc(img(f.src))}" alt="${esc(f.cap || titolo + ' – foto ' + (i + 1))}" ${i ? 'loading="lazy"' : ''}>
             ${f.cap ? `<span class="cap">${esc(f.cap)}</span>` : ''}
           </button>`).join('')}</div>
         ${many ? `<button class="car-btn prev" aria-label="Foto precedente">${ICON_L}</button><button class="car-btn next" aria-label="Foto successiva">${ICON_R}</button>` : ''}

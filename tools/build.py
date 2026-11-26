@@ -144,7 +144,7 @@ PAGES["index.html"] = ("Home", "Sito ufficiale dell'A.S.D. Grifone Catanzaro: pr
 
 <section class="team-top" id="team-block" hidden><div class="wrap">
   <figure class="teamphoto reveal">
-    <img id="team-img" src="" alt="Foto di squadra dell'A.S.D. Grifone Catanzaro">
+    <img class="blurbg" id="team-bg" src="" alt="" aria-hidden="true"><img class="main" id="team-img" src="" alt="Foto di squadra dell'A.S.D. Grifone Catanzaro">
     <figcaption><span class="oswald" id="team-cap">La nostra squadra</span><a class="btn g" href="squadra.html">Scopri la rosa</a></figcaption>
   </figure>
 </div></section>
@@ -234,7 +234,7 @@ PAGES["classifica.html"] = ("Classifica", "Classifica, risultati e marcatori del
 
 PAGES["squadra.html"] = ("Squadra", "La rosa e lo staff tecnico dell'A.S.D. Grifone Catanzaro.", page_head("La squadra", "I calciatori e lo staff tecnico del Grifone.") + '''
 <section class="blk" id="team-block" hidden><div class="wrap">
-  <figure class="teamphoto reveal"><img id="team-img" src="" alt="Foto di squadra dell'A.S.D. Grifone Catanzaro"><figcaption><span class="oswald" id="team-cap">La nostra squadra</span></figcaption></figure>
+  <figure class="teamphoto reveal"><img class="blurbg" id="team-bg" src="" alt="" aria-hidden="true"><img class="main" id="team-img" src="" alt="Foto di squadra dell'A.S.D. Grifone Catanzaro"><figcaption><span class="oswald" id="team-cap">La nostra squadra</span></figcaption></figure>
 </div></section>
 <section class="blk"><div class="wrap" id="rosa"></div></section>
 <section class="blk pb"><div class="wrap">

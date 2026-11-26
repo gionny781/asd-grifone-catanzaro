@@ -344,6 +344,17 @@ a.op:hover span{color:var(--verde)}
 .lb-btn.prev{left:-8px}.lb-btn.next{right:-8px}
 @media (max-width:600px){.lb-btn{width:44px;height:44px}.lb-btn.prev{left:4px}.lb-btn.next{right:4px}}
 
+/* foto verticali: intere, con lo sfondo sfocato ai lati */
+.slide .blurbg,.nc .img .blurbg,.teamphoto .blurbg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(22px) brightness(.55);transform:scale(1.15)}
+.slide img.main{position:relative;object-fit:contain}
+.slide.on img.main{transform:scale(1.03)}
+.slide.on img.blurbg{transform:scale(1.15)}
+.nc .img{position:relative}
+.nc .img.fit img.main{position:relative;object-fit:contain}
+.nc:hover .img.fit img.main{transform:scale(1.05)}
+.teamphoto{background:var(--scuro)}
+.teamphoto img.main{position:relative;object-fit:contain;max-height:620px}
+
 /* manutenzione */
 html.chk body{visibility:hidden}
 .mnt{position:fixed;inset:0;z-index:999;overflow:auto;color:#fff;display:flex;align-items:center;justify-content:center;padding:32px 20px;background-color:var(--scuro);background-image:repeating-linear-gradient(-45deg,rgba(244,194,13,.07) 0 40px,transparent 40px 80px)}
