@@ -117,6 +117,16 @@ def layout(file, title, desc, body):
 '''
 
 
+CAR = """<section class="blk carousel-sec" data-carousel="{where}" hidden><div class="wrap">
+  <div class="sec-h reveal"><h2 class="car-title">Le immagini del Grifone</h2></div>
+  <div class="car" role="region" aria-roledescription="carosello" aria-label="Foto del Grifone">
+    <div class="car-track" tabindex="0"></div>
+    <button class="car-btn prev" aria-label="Foto precedente"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button class="car-btn next" aria-label="Foto successiva"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <div class="car-dots" role="tablist" aria-label="Scegli la foto"></div>
+  </div>
+</div></section>"""
+
 PAGES = {}
 
 PAGES["index.html"] = ("Home", "Sito ufficiale dell'A.S.D. Grifone Catanzaro: prossima partita, risultati, classifica, news e foto della squadra giallo-verde.", f'''<section class="hero">
@@ -146,6 +156,8 @@ PAGES["index.html"] = ("Home", "Sito ufficiale dell'A.S.D. Grifone Catanzaro: pr
     </div>
   </div>
 </div>
+
+{CAR.format(where="home")}
 
 <section class="blk" id="team-block" hidden><div class="wrap">
   <figure class="teamphoto reveal">
@@ -249,7 +261,7 @@ PAGES["societa.html"] = ("Società", "Chi siamo: storia, dirigenza e contatti de
   <div class="org" id="staff-dirigenza"></div>
 </div></section>''')
 
-PAGES["galleria.html"] = ("Foto e video", "Foto e video delle partite dell'A.S.D. Grifone Catanzaro.", page_head("Foto e video", "Le immagini e i video delle nostre partite.") + '''
+PAGES["galleria.html"] = ("Foto e video", "Foto e video delle partite dell'A.S.D. Grifone Catanzaro.", page_head("Foto e video", "Le immagini e i video delle nostre partite.") + CAR.format(where="galleria") + '''
 <section class="dark-sec flat"><div class="wrap">
   <div class="sec-h reveal"><h2>Video</h2></div>
   <div class="videos" id="video-list"></div>

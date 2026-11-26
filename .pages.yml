@@ -197,6 +197,28 @@ content:
       - name: data
         label: Data
         type: date
+      - name: carosello
+        label: Mostra nel carosello
+        type: boolean
+
+  - name: carosello
+    label: Carosello foto (impostazioni)
+    type: file
+    path: data/carosello.json
+    format: json
+    fields:
+      - name: home
+        label: Mostra il carosello nella Home
+        type: boolean
+      - name: galleria
+        label: Mostra il carosello in cima alla pagina Foto e video
+        type: boolean
+      - name: titolo
+        label: Titolo sopra il carosello (facoltativo)
+        type: string
+      - name: secondi
+        label: Secondi tra una foto e l'altra (0 = non scorre da solo)
+        type: string
 
   - name: video
     label: Video

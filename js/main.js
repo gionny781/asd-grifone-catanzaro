@@ -249,6 +249,86 @@
     });
   }
 
+  /* ---------- CAROSELLO ---------- */
+  const carSec = $('[data-carousel]');
+  if (carSec) {
+    Promise.all([load('carosello'), load('gallery')]).then(([cfg, g]) => {
+      cfg = cfg && typeof cfg === 'object' && !Array.isArray(cfg) ? cfg : {};
+      if (cfg[carSec.dataset.carousel] === false) return;
+      const foto = arr(g).filter((x) => x && x.foto && x.carosello === true).sort(byDate);
+      if (!foto.length) return;
+      if (cfg.titolo) $('.car-title', carSec).textContent = cfg.titolo;
+      else $('.sec-h', carSec).remove();
+      const car = $('.car', carSec);
+      const track = $('.car-track', carSec);
+      const dots = $('.car-dots', carSec);
+      track.innerHTML = foto.map((p, i) => `
+        <button class="slide${i ? '' : ' on'}" data-i="${i}" aria-label="Foto ${i + 1} di ${foto.length}${p.didascalia ? ': ' + esc(p.didascalia) : ''}. Apri a schermo intero">
+          <img src="${esc(img(p.foto))}" alt="${esc(p.didascalia)}" ${i ? 'loading="lazy"' : ''}>
+          ${p.didascalia ? `<span class="cap">${esc(p.didascalia)}</span>` : ''}
+        </button>`).join('');
+      car.insertAdjacentHTML('afterbegin', '<div class="car-bar" aria-hidden="true"></div>');
+      dots.innerHTML = foto.map((_, i) => `<button role="tab" aria-label="Foto ${i + 1}" aria-selected="${i === 0}"></button>`).join('');
+      if (foto.length < 2) car.querySelectorAll('.car-btn, .car-dots').forEach((el) => el.remove());
+      carSec.hidden = false;
+      watch(carSec);
+
+      const slides = [...track.children];
+      let cur = 0;
+      const go = (i) => {
+        cur = (i + slides.length) % slides.length;
+        track.scrollTo({ left: slides[cur].offsetLeft, behavior: 'smooth' });
+      };
+      const mark = () => {
+        const i = Math.round(track.scrollLeft / Math.max(1, track.clientWidth));
+        if (i === cur && slides[i].classList.contains('on')) return;
+        cur = Math.min(Math.max(i, 0), slides.length - 1);
+        slides.forEach((s, k) => s.classList.toggle('on', k === cur));
+        dots.querySelectorAll('button').forEach((d, k) => d.setAttribute('aria-selected', k === cur));
+        restart();
+      };
+      let raf = 0;
+      track.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(mark); }, { passive: true });
+      $('.prev', car)?.addEventListener('click', () => go(cur - 1));
+      $('.next', car)?.addEventListener('click', () => go(cur + 1));
+      dots.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) go([...dots.children].indexOf(b)); });
+      track.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
+      });
+      track.addEventListener('click', (e) => {
+        const b = e.target.closest('.slide');
+        if (!b) return;
+        const p = foto[+b.dataset.i];
+        open(`<img src="${esc(img(p.foto))}" alt="${esc(p.didascalia)}">${p.didascalia ? `<p id="modal-title">${esc(p.didascalia)}</p>` : ''}`, true);
+      });
+
+      // scorrimento automatico: si ferma col mouse sopra, col focus, a finestra aperta o se l'utente preferisce meno movimento
+      const sec = parseFloat(String(cfg.secondi ?? '5').replace(',', '.'));
+      const auto = slides.length > 1 && sec > 0 && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let timer = 0;
+      let paused = false;
+      car.style.setProperty('--dur', `${sec}s`);
+      const bar = $('.car-bar', car);
+      function restart() {
+        clearTimeout(timer);
+        car.classList.remove('playing');
+        if (!auto || paused || !modal.hidden || document.hidden) return;
+        void bar.offsetWidth;
+        car.classList.add('playing');
+        timer = setTimeout(() => go(cur + 1), sec * 1000);
+      }
+      const pause = (v) => { paused = v; restart(); };
+      car.addEventListener('mouseenter', () => pause(true));
+      car.addEventListener('mouseleave', () => pause(false));
+      car.addEventListener('focusin', () => pause(true));
+      car.addEventListener('focusout', () => pause(false));
+      document.addEventListener('visibilitychange', restart);
+      new MutationObserver(restart).observe(modal, { attributes: true, attributeFilter: ['hidden'] });
+      restart();
+    });
+  }
+
   /* ---------- VIDEO ---------- */
   const videoList = $('#video-list');
   if (videoList) {
