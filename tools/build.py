@@ -263,7 +263,12 @@ PAGES["societa.html"] = ("Società", "Chi siamo: storia, dirigenza e contatti de
 
 PAGES["galleria.html"] = ("Foto e video", "Foto e video delle partite dell'A.S.D. Grifone Catanzaro.", page_head("Foto e video", "Le immagini e i video delle nostre partite.") + CAR.format(where="galleria") + '''
 <section class="dark-sec flat"><div class="wrap">
-  <div class="sec-h reveal"><h2>Video</h2></div>
+  <div class="album-bar" id="album-bar" hidden>
+    <span class="oswald">Stagione / album</span>
+    <div class="filters dark" id="album-filters" role="tablist" aria-label="Scegli l'album"></div>
+  </div>
+  <h2 class="album-title oswald" id="album-title" hidden></h2>
+  <div class="sec-h reveal" id="video-h"><h2>Video</h2></div>
   <div class="videos" id="video-list"></div>
   <div class="sec-h reveal" style="margin-top:40px"><h2>Fotogallery</h2></div>
   <div class="photos" id="photo-list" data-limit="12"></div>

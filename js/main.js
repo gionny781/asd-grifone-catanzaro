@@ -214,38 +214,95 @@
     });
   }
 
-  /* ---------- FOTO ---------- */
+  /* ---------- FOTO E VIDEO (con album / stagioni) ---------- */
   const photoList = $('#photo-list');
-  if (photoList) {
+  const videoList = $('#video-list');
+  const ytId = (u) => { const m = String(u || '').match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/); return m ? m[1] : ''; };
+  const SENZA = 'Altre foto';
+  if (photoList || videoList) {
     const more = $('#photo-more');
-    const step = +photoList.dataset.limit || 8;
+    const step = photoList ? (+photoList.dataset.limit || 8) : 8;
     let photos = [];
+    let videos = [];
+    let album = null; // null = tutti
     let shown = step;
-    const render = () => {
-      if (!photos.length) {
-        photoList.innerHTML = '<div class="empty" style="grid-column:1/-1">Le foto delle partite arriveranno presto.</div>';
+    const inAlbum = (x) => album === null || (String(x.album || '').trim() || SENZA) === album;
+    const renderPhotos = () => {
+      if (!photoList) return;
+      const l = photos.filter(inAlbum);
+      if (!l.length) {
+        photoList.innerHTML = `<div class="empty" style="grid-column:1/-1">${photos.length ? 'Nessuna foto in questo album.' : 'Le foto delle partite arriveranno presto.'}</div>`;
         if (more) more.hidden = true;
         return;
       }
-      photoList.innerHTML = photos.slice(0, shown).map((p, i) => `
-        <button class="ph reveal stagger" data-i="${i}" aria-label="Apri foto${p.didascalia ? ': ' + esc(p.didascalia) : ''}">
+      photoList.innerHTML = l.slice(0, shown).map((p) => `
+        <button class="ph reveal stagger" data-i="${photos.indexOf(p)}" aria-label="Apri foto${p.didascalia ? ': ' + esc(p.didascalia) : ''}">
           <img src="${esc(img(p.foto))}" alt="${esc(p.didascalia)}" loading="lazy">
           ${p.didascalia ? `<span>${esc(p.didascalia)}</span>` : ''}
         </button>`).join('');
-      if (more) more.hidden = shown >= photos.length;
+      if (more) more.hidden = shown >= l.length;
       watch(photoList);
     };
-    photoList.addEventListener('click', (e) => {
-      const b = e.target.closest('.ph');
-      if (!b) return;
-      const p = photos[+b.dataset.i];
-      open(`<img src="${esc(img(p.foto))}" alt="${esc(p.didascalia)}">${p.didascalia ? `<p id="modal-title">${esc(p.didascalia)}</p>` : ''}`, true);
-    });
-    if (more) more.addEventListener('click', () => { shown += step; render(); });
-    load('gallery').then((g) => {
+    const renderVideos = () => {
+      if (!videoList) return;
+      const l = videos.filter(inAlbum);
+      const vh = $('#video-h');
+      if (vh) vh.hidden = album !== null && !l.length;
+      videoList.hidden = album !== null && !l.length;
+      videoList.innerHTML = l.length ? l.map((x) => `
+        <a class="vc reveal stagger" href="https://www.youtube.com/watch?v=${ytId(x.youtube)}" target="_blank" rel="noopener">
+          <img src="https://img.youtube.com/vi/${ytId(x.youtube)}/hqdefault.jpg" alt="" loading="lazy">
+          <span class="play" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#0B1F14"/></svg></span>
+          <span class="vt">${esc(x.titolo)}</span>
+        </a>`).join('') : '<div class="empty" style="grid-column:1/-1">I video arriveranno presto.</div>';
+      watch(videoList);
+    };
+    const setAlbum = (a) => {
+      album = a;
+      shown = step;
+      const t = $('#album-title');
+      if (t) { t.hidden = a === null; t.innerHTML = a === null ? '' : esc(a).replace(/^(\S+)/, '<span>$1</span>'); }
+      document.querySelectorAll('#album-filters button').forEach((b) => {
+        const on = (b.dataset.a === '' ? null : b.dataset.a) === a;
+        b.classList.toggle('on', on);
+        b.setAttribute('aria-selected', on);
+      });
+      renderPhotos();
+      renderVideos();
+    };
+    if (photoList) {
+      photoList.addEventListener('click', (e) => {
+        const b = e.target.closest('.ph');
+        if (!b) return;
+        const p = photos[+b.dataset.i];
+        open(`<img src="${esc(img(p.foto))}" alt="${esc(p.didascalia)}">${p.didascalia ? `<p id="modal-title">${esc(p.didascalia)}${p.album ? ' · ' + esc(p.album) : ''}</p>` : ''}`, true);
+      });
+    }
+    if (more) more.addEventListener('click', () => { shown += step; renderPhotos(); });
+    Promise.all([photoList ? load('gallery') : null, videoList ? load('video') : null]).then(([g, v]) => {
       photos = arr(g).filter((x) => x && x.foto).sort(byDate);
+      videos = arr(v).filter((x) => x && ytId(x.youtube)).sort(byDate);
       show('#home-gallery', photos.length > 0);
-      render();
+      // album ordinati dal più recente (data più nuova dentro l'album), "Altre foto" in fondo
+      const filtri = $('#album-filters');
+      const latest = {};
+      [...photos, ...videos].forEach((x) => {
+        const k = String(x.album || '').trim() || SENZA;
+        const d = String(x.data || '');
+        if (!(k in latest) || d > latest[k]) latest[k] = d;
+      });
+      const albums = Object.keys(latest).sort((x, y) => (x === SENZA) - (y === SENZA) || latest[y].localeCompare(latest[x]) || y.localeCompare(x, 'it'));
+      if (filtri && albums.length > 1 || (filtri && albums.length === 1 && albums[0] !== SENZA)) {
+        filtri.innerHTML = albums.map((k) => `<button role="tab" data-a="${esc(k)}">${esc(k)}</button>`).join('') + '<button role="tab" data-a="">Tutti</button>';
+        filtri.addEventListener('click', (e) => {
+          const b = e.target.closest('button');
+          if (b) setAlbum(b.dataset.a === '' ? null : b.dataset.a);
+        });
+        $('#album-bar').hidden = false;
+        setAlbum(albums[0]);
+      } else {
+        setAlbum(null);
+      }
     });
   }
 
@@ -326,22 +383,6 @@
       document.addEventListener('visibilitychange', restart);
       new MutationObserver(restart).observe(modal, { attributes: true, attributeFilter: ['hidden'] });
       restart();
-    });
-  }
-
-  /* ---------- VIDEO ---------- */
-  const videoList = $('#video-list');
-  if (videoList) {
-    const ytId = (u) => { const m = String(u || '').match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/); return m ? m[1] : ''; };
-    load('video').then((v) => {
-      const list = arr(v).filter((x) => x && ytId(x.youtube));
-      videoList.innerHTML = list.length ? list.map((x) => `
-        <a class="vc reveal stagger" href="https://www.youtube.com/watch?v=${ytId(x.youtube)}" target="_blank" rel="noopener">
-          <img src="https://img.youtube.com/vi/${ytId(x.youtube)}/hqdefault.jpg" alt="" loading="lazy">
-          <span class="play" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#0B1F14"/></svg></span>
-          <span class="vt">${esc(x.titolo)}</span>
-        </a>`).join('') : '<div class="empty" style="grid-column:1/-1">I video arriveranno presto.</div>';
-      watch(videoList);
     });
   }
 

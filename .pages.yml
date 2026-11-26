@@ -191,6 +191,9 @@ content:
         label: Foto
         type: image
         required: true
+      - name: album
+        label: Album / stagione (es. Stagione 2022 - 2023). Scrivilo sempre uguale per raggruppare le foto
+        type: string
       - name: didascalia
         label: Didascalia
         type: string
@@ -235,6 +238,12 @@ content:
         label: Link YouTube
         type: string
         required: true
+      - name: album
+        label: Album / stagione (es. Stagione 2022 - 2023)
+        type: string
+      - name: data
+        label: Data (facoltativa, per l'ordine)
+        type: date
 
   - name: sponsor
     label: Partner e sponsor

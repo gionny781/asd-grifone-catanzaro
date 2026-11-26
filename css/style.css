@@ -1,4 +1,5 @@
 :root{--verde:#0B5A2C;--verde2:#0E6B35;--giallo:#F4C20D;--scuro:#0B1F14;--fondo:#F7F6F1;--testo:#15201A;--grigio:#4A564F;--ease:cubic-bezier(.2,.8,.2,1)}
+[hidden]{display:none!important}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:90px}
 body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--testo);background:var(--fondo);overflow-x:clip}
@@ -283,6 +284,16 @@ a.op:hover span{color:var(--verde)}
 .ci:hover{padding-left:6px}
 .ci b{font-family:Oswald,sans-serif;font-size:18px;text-transform:uppercase;color:var(--verde)}
 .ci a{overflow-wrap:anywhere;font-weight:600}
+
+/* album foto e video */
+.album-bar{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid #2A4A36}
+.album-bar>span{color:var(--giallo);font-size:15px}
+.filters.dark{margin:0}
+.filters.dark button{background:transparent;border-color:var(--giallo);color:var(--giallo)}
+.filters.dark button.on,.filters.dark button:hover{background:var(--giallo);color:var(--scuro)}
+.album-title{margin:0 0 28px;font-size:clamp(28px,4vw,44px);line-height:1.1;color:#fff}
+.album-title span{color:var(--giallo)}
+.ph-group{grid-column:1/-1;margin:18px 0 2px;font-family:Oswald,sans-serif;font-size:22px;text-transform:uppercase;color:var(--giallo)}
 
 /* carosello */
 .car{position:relative;box-shadow:0 14px 40px rgba(11,31,20,.2);background:var(--scuro);border-bottom:6px solid var(--giallo)}
