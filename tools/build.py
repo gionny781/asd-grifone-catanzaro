@@ -119,12 +119,7 @@ def layout(file, title, desc, body):
 
 CAR = """<section class="blk carousel-sec" data-carousel="{where}" hidden><div class="wrap">
   <div class="sec-h reveal"><h2 class="car-title">Le immagini del Grifone</h2></div>
-  <div class="car" role="region" aria-roledescription="carosello" aria-label="Foto del Grifone">
-    <div class="car-track" tabindex="0"></div>
-    <button class="car-btn prev" aria-label="Foto precedente"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    <button class="car-btn next" aria-label="Foto successiva"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    <div class="car-dots" role="tablist" aria-label="Scegli la foto"></div>
-  </div>
+  <div class="car-slot"></div>
 </div></section>"""
 
 PAGES = {}
@@ -261,7 +256,7 @@ PAGES["societa.html"] = ("Società", "Chi siamo: storia, dirigenza e contatti de
   <div class="org" id="staff-dirigenza"></div>
 </div></section>''')
 
-PAGES["galleria.html"] = ("Foto e video", "Foto e video delle partite dell'A.S.D. Grifone Catanzaro.", page_head("Foto e video", "Le immagini e i video delle nostre partite.") + CAR.format(where="galleria") + '''
+PAGES["galleria.html"] = ("Foto e video", "Foto e video delle partite dell'A.S.D. Grifone Catanzaro.", page_head("Foto e video", "Le immagini e i video delle nostre partite.") + '''
 <section class="dark-sec flat"><div class="wrap">
   <div class="album-bar" id="album-bar" hidden>
     <span class="oswald">Stagione / album</span>
@@ -270,9 +265,8 @@ PAGES["galleria.html"] = ("Foto e video", "Foto e video delle partite dell'A.S.D
   <h2 class="album-title oswald" id="album-title" hidden></h2>
   <div class="sec-h reveal" id="video-h"><h2>Video</h2></div>
   <div class="videos" id="video-list"></div>
-  <div class="sec-h reveal" style="margin-top:40px"><h2>Fotogallery</h2></div>
-  <div class="photos" id="photo-list" data-limit="12"></div>
-  <button class="more light" id="photo-more" hidden>Mostra altre foto</button>
+  <div class="sec-h reveal" style="margin-top:40px" id="gal-h"><h2>Fotogallery</h2></div>
+  <div class="gal-list" id="gal-list"></div>
 </div></section>''')
 
 PAGES["partner.html"] = ("Partner", "I partner e gli sponsor che sostengono l'A.S.D. Grifone Catanzaro.", page_head("I nostri partner", "Le aziende che sostengono il Grifone, dentro e fuori dal campo.") + '''

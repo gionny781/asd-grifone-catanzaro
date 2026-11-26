@@ -50,8 +50,12 @@ def main():
     reg = json.loads(REG.read_text()) if REG.exists() else []
     gallery = json.loads((ROOT / "data" / "gallery.json").read_text() or "[]")
     fatte = 0
+    percorsi = []
     for item in gallery if isinstance(gallery, list) else []:
-        p = str((item or {}).get("foto") or "").lstrip("/")
+        f = (item or {}).get("foto") or []
+        percorsi += f if isinstance(f, list) else [f]
+    for p in percorsi:
+        p = str(p or "").lstrip("/")
         if not p: continue
         path = ROOT / p
         if not path.is_file() or path.suffix.lower() not in (".jpg", ".jpeg", ".png", ".webp"): continue

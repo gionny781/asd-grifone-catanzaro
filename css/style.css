@@ -317,6 +317,18 @@ a.op:hover span{color:var(--verde)}
 @keyframes carbar{to{width:100%}}
 @media (max-width:600px){.car-btn{width:44px;height:44px;margin-top:-22px}.slide{aspect-ratio:4/3}.slide .cap{padding:50px 16px 44px}}
 
+.car-count{position:absolute;right:16px;bottom:14px;z-index:2;background:rgba(11,31,20,.75);color:#fff;font-weight:700;font-size:14px;padding:5px 12px;border-radius:20px}
+.gal-list{display:flex;flex-direction:column;gap:44px}
+.gal-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 16px;margin-bottom:14px}
+.gal-h h3{margin:0;font-family:Oswald,sans-serif;font-size:clamp(22px,3vw,30px);text-transform:uppercase;color:#fff}
+.gal-h span{color:#A9BDB0;font-size:14px}
+.gal .car{border-bottom-color:var(--giallo)}
+.gal .slide{max-height:560px}
+.lb-btn{position:absolute;top:50%;width:52px;height:52px;margin-top:-40px;border:0;border-radius:50%;background:var(--giallo);color:var(--scuro);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.35);transition:transform .2s}
+.lb-btn:hover{transform:scale(1.1)}
+.lb-btn.prev{left:-8px}.lb-btn.next{right:-8px}
+@media (max-width:600px){.lb-btn{width:44px;height:44px}.lb-btn.prev{left:4px}.lb-btn.next{right:4px}}
+
 /* manutenzione */
 html.chk body{visibility:hidden}
 .mnt{position:fixed;inset:0;z-index:999;overflow:auto;color:#fff;display:flex;align-items:center;justify-content:center;padding:32px 20px;background-color:var(--scuro);background-image:repeating-linear-gradient(-45deg,rgba(244,194,13,.07) 0 40px,transparent 40px 80px)}

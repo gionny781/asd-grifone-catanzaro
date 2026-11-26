@@ -214,34 +214,161 @@
     });
   }
 
-  /* ---------- FOTO E VIDEO (con album / stagioni) ---------- */
+  /* ---------- GALLERIE (un carosello per partita) ---------- */
+  // Ogni elemento della Fotogallery: { titolo, album, data, foto: [percorsi], home }
+  // Compatibile anche col vecchio formato a foto singola.
+  const normGal = (g) => arr(g).filter(Boolean).map((x) => ({
+    titolo: x.titolo || x.didascalia || '',
+    album: String(x.album || '').trim(),
+    data: x.data || '',
+    foto: (Array.isArray(x.foto) ? x.foto : [x.foto]).filter(Boolean),
+    home: x.home === true || x.carosello === true,
+  })).filter((x) => x.foto.length).sort(byDate);
+
+  const ICON_L = '<svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const ICON_R = '<svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  // Finestra a schermo intero con frecce, per sfogliare tutte le foto di un carosello
+  const lightbox = (fotos, start, titolo) => {
+    let i = start;
+    const draw = () => {
+      body.innerHTML = `<img src="${esc(img(fotos[i]))}" alt="${esc(titolo)} – foto ${i + 1}">
+        <p id="modal-title">${esc(titolo)}${fotos.length > 1 ? ` · ${i + 1} / ${fotos.length}` : ''}</p>
+        ${fotos.length > 1 ? `<button class="lb-btn prev" aria-label="Foto precedente">${ICON_L}</button><button class="lb-btn next" aria-label="Foto successiva">${ICON_R}</button>` : ''}`;
+    };
+    open('', true);
+    draw();
+    const nav = (d) => { i = (i + d + fotos.length) % fotos.length; draw(); };
+    const onClick = (e) => { if (e.target.closest('.lb-btn.prev')) nav(-1); else if (e.target.closest('.lb-btn.next')) nav(1); };
+    const onKey = (e) => { if (e.key === 'ArrowLeft') nav(-1); if (e.key === 'ArrowRight') nav(1); };
+    body.addEventListener('click', onClick);
+    document.addEventListener('keydown', onKey);
+    new MutationObserver((m, obs) => {
+      if (modal.hidden) { body.removeEventListener('click', onClick); document.removeEventListener('keydown', onKey); obs.disconnect(); }
+    }).observe(modal, { attributes: true, attributeFilter: ['hidden'] });
+  };
+
+  // Crea un carosello dentro "slot". sec = secondi di scorrimento automatico (0 = manuale)
+  const makeCarousel = (slot, fotos, titolo, sec = 0) => {
+    const many = fotos.length > 1;
+    const dotsHtml = fotos.length <= 12
+      ? fotos.map((_, i) => `<button role="tab" aria-label="Foto ${i + 1}" aria-selected="${i === 0}"></button>`).join('')
+      : '';
+    slot.innerHTML = `<div class="car" role="region" aria-roledescription="carosello" aria-label="${esc(titolo)}">
+        <div class="car-bar" aria-hidden="true"></div>
+        <div class="car-track" tabindex="0">${fotos.map((f, i) => `
+          <button class="slide${i ? '' : ' on'}" data-i="${i}" aria-label="Foto ${i + 1} di ${fotos.length}. Apri a schermo intero">
+            <img src="${esc(img(f))}" alt="${esc(titolo)} – foto ${i + 1}" ${i ? 'loading="lazy"' : ''}>
+          </button>`).join('')}</div>
+        ${many ? `<button class="car-btn prev" aria-label="Foto precedente">${ICON_L}</button><button class="car-btn next" aria-label="Foto successiva">${ICON_R}</button>` : ''}
+        ${many ? (dotsHtml ? `<div class="car-dots" role="tablist" aria-label="Scegli la foto">${dotsHtml}</div>` : `<div class="car-count" aria-live="polite">1 / ${fotos.length}</div>`) : ''}
+      </div>`;
+    const car = $('.car', slot);
+    const track = $('.car-track', car);
+    const dots = $('.car-dots', car);
+    const count = $('.car-count', car);
+    const slides = [...track.children];
+    let cur = 0;
+    const go = (i) => { cur = (i + slides.length) % slides.length; track.scrollTo({ left: slides[cur].offsetLeft, behavior: 'smooth' }); };
+    let timer = 0;
+    let paused = false;
+    const auto = many && sec > 0 && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    car.style.setProperty('--dur', `${sec}s`);
+    const bar = $('.car-bar', car);
+    const restart = () => {
+      clearTimeout(timer);
+      car.classList.remove('playing');
+      if (!auto || paused || !modal.hidden || document.hidden) return;
+      void bar.offsetWidth;
+      car.classList.add('playing');
+      timer = setTimeout(() => go(cur + 1), sec * 1000);
+    };
+    const mark = () => {
+      const i = Math.min(Math.max(Math.round(track.scrollLeft / Math.max(1, track.clientWidth)), 0), slides.length - 1);
+      if (i === cur && slides[i].classList.contains('on')) return;
+      cur = i;
+      slides.forEach((s, k) => s.classList.toggle('on', k === cur));
+      if (dots) dots.querySelectorAll('button').forEach((d, k) => d.setAttribute('aria-selected', k === cur));
+      if (count) count.textContent = `${cur + 1} / ${slides.length}`;
+      restart();
+    };
+    let raf = 0;
+    track.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(mark); }, { passive: true });
+    $('.car-btn.prev', car)?.addEventListener('click', () => go(cur - 1));
+    $('.car-btn.next', car)?.addEventListener('click', () => go(cur + 1));
+    dots?.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) go([...dots.children].indexOf(b)); });
+    track.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
+    });
+    track.addEventListener('click', (e) => { const b = e.target.closest('.slide'); if (b) lightbox(fotos, +b.dataset.i, titolo); });
+    if (auto) {
+      car.addEventListener('mouseenter', () => { paused = true; restart(); });
+      car.addEventListener('mouseleave', () => { paused = false; restart(); });
+      car.addEventListener('focusin', () => { paused = true; restart(); });
+      car.addEventListener('focusout', () => { paused = false; restart(); });
+      document.addEventListener('visibilitychange', restart);
+      new MutationObserver(restart).observe(modal, { attributes: true, attributeFilter: ['hidden'] });
+      restart();
+    }
+  };
+
+  /* Home: carosello della partita scelta + ultime foto */
+  const carSec = $('[data-carousel="home"]');
   const photoList = $('#photo-list');
+  if (carSec || photoList) {
+    Promise.all([load('carosello'), load('gallery')]).then(([cfg, g]) => {
+      cfg = cfg && typeof cfg === 'object' && !Array.isArray(cfg) ? cfg : {};
+      const gals = normGal(g);
+      if (carSec && cfg.home !== false) {
+        const gal = gals.find((x) => x.home);
+        if (gal) {
+          const t = cfg.titolo || gal.titolo;
+          if (t) $('.car-title', carSec).textContent = t; else $('.sec-h', carSec).remove();
+          makeCarousel($('.car-slot', carSec), gal.foto, gal.titolo || 'Foto del Grifone', parseFloat(String(cfg.secondi ?? '5').replace(',', '.')) || 0);
+          carSec.hidden = false;
+          watch(carSec);
+        }
+      }
+      if (photoList) {
+        const ultime = gals.flatMap((x) => x.foto.map((f, i) => ({ f, i, gal: x }))).slice(0, +photoList.dataset.limit || 4);
+        show('#home-gallery', ultime.length > 0);
+        photoList.innerHTML = ultime.map((u, k) => `
+          <button class="ph reveal stagger" data-k="${k}" aria-label="Apri foto: ${esc(u.gal.titolo)}">
+            <img src="${esc(img(u.f))}" alt="${esc(u.gal.titolo)}" loading="lazy"><span>${esc(u.gal.titolo)}</span>
+          </button>`).join('');
+        photoList.addEventListener('click', (e) => {
+          const b = e.target.closest('.ph');
+          if (!b) return;
+          const u = ultime[+b.dataset.k];
+          lightbox(u.gal.foto, u.i, u.gal.titolo);
+        });
+        watch(photoList);
+      }
+    });
+  }
+
+  /* Pagina Foto e video: album / stagioni, un carosello per partita, video */
+  const galList = $('#gal-list');
   const videoList = $('#video-list');
   const ytId = (u) => { const m = String(u || '').match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/); return m ? m[1] : ''; };
   const SENZA = 'Altre foto';
-  if (photoList || videoList) {
-    const more = $('#photo-more');
-    const step = photoList ? (+photoList.dataset.limit || 8) : 8;
-    let photos = [];
+  if (galList || videoList) {
+    let gals = [];
     let videos = [];
     let album = null; // null = tutti
-    let shown = step;
     const inAlbum = (x) => album === null || (String(x.album || '').trim() || SENZA) === album;
-    const renderPhotos = () => {
-      if (!photoList) return;
-      const l = photos.filter(inAlbum);
-      if (!l.length) {
-        photoList.innerHTML = `<div class="empty" style="grid-column:1/-1">${photos.length ? 'Nessuna foto in questo album.' : 'Le foto delle partite arriveranno presto.'}</div>`;
-        if (more) more.hidden = true;
-        return;
-      }
-      photoList.innerHTML = l.slice(0, shown).map((p) => `
-        <button class="ph reveal stagger" data-i="${photos.indexOf(p)}" aria-label="Apri foto${p.didascalia ? ': ' + esc(p.didascalia) : ''}">
-          <img src="${esc(img(p.foto))}" alt="${esc(p.didascalia)}" loading="lazy">
-          ${p.didascalia ? `<span>${esc(p.didascalia)}</span>` : ''}
-        </button>`).join('');
-      if (more) more.hidden = shown >= l.length;
-      watch(photoList);
+    const renderGals = () => {
+      if (!galList) return;
+      const l = gals.filter(inAlbum);
+      galList.innerHTML = l.length ? l.map((x, k) => `
+        <article class="gal reveal">
+          <div class="gal-h"><h3>${esc(x.titolo)}</h3><span>${x.data ? fmtData(x.data) + ' · ' : ''}${x.foto.length} ${x.foto.length === 1 ? 'foto' : 'foto'}</span></div>
+          <div class="car-slot" data-k="${k}"></div>
+        </article>`).join('')
+        : `<div class="empty">${gals.length ? 'Nessuna galleria in questo album.' : 'Le foto delle partite arriveranno presto.'}</div>`;
+      galList.querySelectorAll('.car-slot').forEach((slot) => { const x = l[+slot.dataset.k]; makeCarousel(slot, x.foto, x.titolo, 0); });
+      watch(galList);
     };
     const renderVideos = () => {
       if (!videoList) return;
@@ -259,7 +386,6 @@
     };
     const setAlbum = (a) => {
       album = a;
-      shown = step;
       const t = $('#album-title');
       if (t) { t.hidden = a === null; t.innerHTML = a === null ? '' : esc(a).replace(/^(\S+)/, '<span>$1</span>'); }
       document.querySelectorAll('#album-filters button').forEach((b) => {
@@ -267,122 +393,29 @@
         b.classList.toggle('on', on);
         b.setAttribute('aria-selected', on);
       });
-      renderPhotos();
+      renderGals();
       renderVideos();
     };
-    if (photoList) {
-      photoList.addEventListener('click', (e) => {
-        const b = e.target.closest('.ph');
-        if (!b) return;
-        const p = photos[+b.dataset.i];
-        open(`<img src="${esc(img(p.foto))}" alt="${esc(p.didascalia)}">${p.didascalia ? `<p id="modal-title">${esc(p.didascalia)}${p.album ? ' · ' + esc(p.album) : ''}</p>` : ''}`, true);
-      });
-    }
-    if (more) more.addEventListener('click', () => { shown += step; renderPhotos(); });
-    Promise.all([photoList ? load('gallery') : null, videoList ? load('video') : null]).then(([g, v]) => {
-      photos = arr(g).filter((x) => x && x.foto).sort(byDate);
+    Promise.all([galList ? load('gallery') : null, videoList ? load('video') : null]).then(([g, v]) => {
+      gals = normGal(g);
       videos = arr(v).filter((x) => x && ytId(x.youtube)).sort(byDate);
-      show('#home-gallery', photos.length > 0);
-      // album ordinati dal più recente (data più nuova dentro l'album), "Altre foto" in fondo
-      const filtri = $('#album-filters');
+      // album dal più recente; "Altre foto" in fondo
       const latest = {};
-      [...photos, ...videos].forEach((x) => {
+      [...gals, ...videos].forEach((x) => {
         const k = String(x.album || '').trim() || SENZA;
         const d = String(x.data || '');
         if (!(k in latest) || d > latest[k]) latest[k] = d;
       });
       const albums = Object.keys(latest).sort((x, y) => (x === SENZA) - (y === SENZA) || latest[y].localeCompare(latest[x]) || y.localeCompare(x, 'it'));
-      if (filtri && albums.length > 1 || (filtri && albums.length === 1 && albums[0] !== SENZA)) {
+      const filtri = $('#album-filters');
+      if (filtri && albums.length && !(albums.length === 1 && albums[0] === SENZA)) {
         filtri.innerHTML = albums.map((k) => `<button role="tab" data-a="${esc(k)}">${esc(k)}</button>`).join('') + '<button role="tab" data-a="">Tutti</button>';
-        filtri.addEventListener('click', (e) => {
-          const b = e.target.closest('button');
-          if (b) setAlbum(b.dataset.a === '' ? null : b.dataset.a);
-        });
+        filtri.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) setAlbum(b.dataset.a === '' ? null : b.dataset.a); });
         $('#album-bar').hidden = false;
         setAlbum(albums[0]);
       } else {
         setAlbum(null);
       }
-    });
-  }
-
-  /* ---------- CAROSELLO ---------- */
-  const carSec = $('[data-carousel]');
-  if (carSec) {
-    Promise.all([load('carosello'), load('gallery')]).then(([cfg, g]) => {
-      cfg = cfg && typeof cfg === 'object' && !Array.isArray(cfg) ? cfg : {};
-      if (cfg[carSec.dataset.carousel] === false) return;
-      const foto = arr(g).filter((x) => x && x.foto && x.carosello === true).sort(byDate);
-      if (!foto.length) return;
-      if (cfg.titolo) $('.car-title', carSec).textContent = cfg.titolo;
-      else $('.sec-h', carSec).remove();
-      const car = $('.car', carSec);
-      const track = $('.car-track', carSec);
-      const dots = $('.car-dots', carSec);
-      track.innerHTML = foto.map((p, i) => `
-        <button class="slide${i ? '' : ' on'}" data-i="${i}" aria-label="Foto ${i + 1} di ${foto.length}${p.didascalia ? ': ' + esc(p.didascalia) : ''}. Apri a schermo intero">
-          <img src="${esc(img(p.foto))}" alt="${esc(p.didascalia)}" ${i ? 'loading="lazy"' : ''}>
-          ${p.didascalia ? `<span class="cap">${esc(p.didascalia)}</span>` : ''}
-        </button>`).join('');
-      car.insertAdjacentHTML('afterbegin', '<div class="car-bar" aria-hidden="true"></div>');
-      dots.innerHTML = foto.map((_, i) => `<button role="tab" aria-label="Foto ${i + 1}" aria-selected="${i === 0}"></button>`).join('');
-      if (foto.length < 2) car.querySelectorAll('.car-btn, .car-dots').forEach((el) => el.remove());
-      carSec.hidden = false;
-      watch(carSec);
-
-      const slides = [...track.children];
-      let cur = 0;
-      const go = (i) => {
-        cur = (i + slides.length) % slides.length;
-        track.scrollTo({ left: slides[cur].offsetLeft, behavior: 'smooth' });
-      };
-      const mark = () => {
-        const i = Math.round(track.scrollLeft / Math.max(1, track.clientWidth));
-        if (i === cur && slides[i].classList.contains('on')) return;
-        cur = Math.min(Math.max(i, 0), slides.length - 1);
-        slides.forEach((s, k) => s.classList.toggle('on', k === cur));
-        dots.querySelectorAll('button').forEach((d, k) => d.setAttribute('aria-selected', k === cur));
-        restart();
-      };
-      let raf = 0;
-      track.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(mark); }, { passive: true });
-      $('.prev', car)?.addEventListener('click', () => go(cur - 1));
-      $('.next', car)?.addEventListener('click', () => go(cur + 1));
-      dots.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) go([...dots.children].indexOf(b)); });
-      track.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1); }
-        if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
-      });
-      track.addEventListener('click', (e) => {
-        const b = e.target.closest('.slide');
-        if (!b) return;
-        const p = foto[+b.dataset.i];
-        open(`<img src="${esc(img(p.foto))}" alt="${esc(p.didascalia)}">${p.didascalia ? `<p id="modal-title">${esc(p.didascalia)}</p>` : ''}`, true);
-      });
-
-      // scorrimento automatico: si ferma col mouse sopra, col focus, a finestra aperta o se l'utente preferisce meno movimento
-      const sec = parseFloat(String(cfg.secondi ?? '5').replace(',', '.'));
-      const auto = slides.length > 1 && sec > 0 && !matchMedia('(prefers-reduced-motion: reduce)').matches;
-      let timer = 0;
-      let paused = false;
-      car.style.setProperty('--dur', `${sec}s`);
-      const bar = $('.car-bar', car);
-      function restart() {
-        clearTimeout(timer);
-        car.classList.remove('playing');
-        if (!auto || paused || !modal.hidden || document.hidden) return;
-        void bar.offsetWidth;
-        car.classList.add('playing');
-        timer = setTimeout(() => go(cur + 1), sec * 1000);
-      }
-      const pause = (v) => { paused = v; restart(); };
-      car.addEventListener('mouseenter', () => pause(true));
-      car.addEventListener('mouseleave', () => pause(false));
-      car.addEventListener('focusin', () => pause(true));
-      car.addEventListener('focusout', () => pause(false));
-      document.addEventListener('visibilitychange', restart);
-      new MutationObserver(restart).observe(modal, { attributes: true, attributeFilter: ['hidden'] });
-      restart();
     });
   }
 

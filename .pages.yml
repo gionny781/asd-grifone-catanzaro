@@ -181,31 +181,33 @@ content:
         type: text
 
   - name: gallery
-    label: Fotogallery
+    label: Fotogallery (un carosello per ogni partita o evento)
     type: file
     path: data/gallery.json
     format: json
     list: true
     fields:
-      - name: foto
-        label: Foto
-        type: image
+      - name: titolo
+        label: Titolo (es. Vigor Catanzaro - ASD Grifone 18.02.2023)
+        type: string
         required: true
       - name: album
-        label: Album / stagione (es. Stagione 2022 - 2023). Scrivilo sempre uguale per raggruppare le foto
-        type: string
-      - name: didascalia
-        label: Didascalia
+        label: Album / stagione (es. Stagione 2022 - 2023). Scrivilo sempre uguale per raggruppare
         type: string
       - name: data
         label: Data
         type: date
-      - name: carosello
-        label: Mostra nel carosello
+      - name: foto
+        label: Foto (puoi selezionarne tante insieme; trascinale per cambiare l'ordine)
+        type: image
+        list: true
+        required: true
+      - name: home
+        label: Mostra questo carosello nella Home
         type: boolean
 
   - name: carosello
-    label: Carosello foto (impostazioni)
+    label: Carosello della Home (impostazioni)
     type: file
     path: data/carosello.json
     format: json
@@ -213,11 +215,8 @@ content:
       - name: home
         label: Mostra il carosello nella Home
         type: boolean
-      - name: galleria
-        label: Mostra il carosello in cima alla pagina Foto e video
-        type: boolean
       - name: titolo
-        label: Titolo sopra il carosello (facoltativo)
+        label: Titolo sopra il carosello della Home (facoltativo; se vuoto usa il titolo della partita)
         type: string
       - name: secondi
         label: Secondi tra una foto e l'altra (0 = non scorre da solo)

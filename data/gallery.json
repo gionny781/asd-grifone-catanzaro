@@ -1,9 +1,11 @@
 [
   {
-    "foto": "images/uploads/WhatsApp Image 2023-02-19 at 17.22.43 (1) copia.jpg",
+    "titolo": "Vigor Catanzaro - ASD Grifone -18.02.2023",
     "album": "Stagione 2022 - 2023",
-    "didascalia": "Vigor Catanzaro - ASD Grifone -18.02.2023",
     "data": "2023-02-18",
-    "carosello": true
+    "foto": [
+      "images/uploads/WhatsApp Image 2023-02-19 at 17.22.43 (1) copia.jpg"
+    ],
+    "home": true
   }
 ]
