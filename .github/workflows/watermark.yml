@@ -1,0 +1,44 @@
+name: Logo sulle foto della gallery
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/gallery.json"
+      - "images/uploads/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: watermark
+  cancel-in-progress: false
+
+jobs:
+  watermark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pillow
+      - run: python tools/watermark.py
+      - name: Salva le foto marchiate
+        id: commit
+        run: |
+          git config user.name "grifone-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A images data/.watermark.json
+          if git diff --cached --quiet; then echo "changed=false" >> "$GITHUB_OUTPUT"; exit 0; fi
+          git commit -m "Logo del Grifone sulle nuove foto della gallery"
+          git pull --rebase origin main
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+      - name: Ripubblica il sito
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds" || true
